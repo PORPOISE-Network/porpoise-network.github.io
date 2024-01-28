@@ -85,21 +85,61 @@
                 console.log('⏰ Deadline:', alarmclock);
                 console.log('🔮 Oracle: ', oracle);
 
-                document.getElementById('🐬').innerHTML = '🐬 ' + dolphin.replace(/-/g, ' ');
-                document.getElementById('⏰').innerHTML = '⏰ Deadline: ' + convertUTCtoDate(alarmclock);
-                document.getElementById('🔮').innerHTML = '🔮 Oracle Address: ' + oracle;
+                if (dolphin === null) {
+                    document.getElementById('🐬').innerHTML = "Missing 🐬 in URL.";
+                    return 0;
+                } else {
+                    document.getElementById('🐬').innerHTML = '🐬 ' + dolphin.replace(/-/g, ' ');
+                }
+
+                if (alarmclock === null) {
+                    document.getElementById('🐬').innerHTML = "Missing ⏰ in URL.";
+                    return 0;
+                } else {
+                    document.getElementById('⏰').innerHTML = '⏰ Deadline: ' + convertUTCtoDate(alarmclock);
+                }
+
+                if (oracle === null) {
+                    document.getElementById('⏰').innerHTML = '';
+                    document.getElementById('🐬').innerHTML = "Missing 🔮 in URL.";
+                    return 0;
+                } else {
+                    document.getElementById('🔮').innerHTML = '🔮 Oracle Address: ' + oracle;
+                }
 
                 // loop over the options and store in an options array
-                let optionsContainer = document.getElementById('🗳')
+                const options = [];
                 for (let i = 1; i <= numOptions; i++) {
                     let option = urlParams.get('🗳' + i);
-                    console.log("Option", i, ": ", option);
-                    let paragraphElement = document.createElement('p');
-                    paragraphElement.textContent = '🗳' + i + ". " + option.replace(/-/g, ' ');
-                    optionsContainer.appendChild(paragraphElement);
+                    if (option !== null) {
+                        options.push(option.replace(/-/g, ' '));
+                    }
+                }
+
+                if (options.length < 2) {
+                    document.getElementById('⏰').innerHTML = '';
+                    document.getElementById('🔮').innerHTML = '';
+                    document.getElementById('🐬').innerHTML = "A PORPOISE survey must have at least 2 options (🗳1 & 🗳2)."
+                    return 0;
+                } else {
+                    setOptions(options);
                 }
             } else {
-                console.log("Not enough query params for a PORPOISE-compatible survey.")
+                const message = "Not enough emojis for a PORPOISE-compatible survey."
+                document.getElementById('🐬').innerHTML = message;
+                console.log(message)
+            }
+            return 1;
+        }
+
+        function setOptions(optionsArray) {
+            let optionsContainer = document.getElementById('🗳')
+
+            for (let i = 0; i < optionsArray.length; i++) {
+                console.log("Option", i, ": ", optionsArray[i]);
+                let paragraphElement = document.createElement('p');
+                paragraphElement.textContent = '🗳' + (i+1) + ". " + optionsArray[i];
+                optionsContainer.appendChild(paragraphElement);
             }
         }
 
