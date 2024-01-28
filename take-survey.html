@@ -57,6 +57,7 @@
             padding: 16px;
             margin-bottom: 20px;
             width: max-content;
+            max-width: 100%;
             align-items: center;
             justify-content: center;
             display: inline;
@@ -88,6 +89,50 @@
             border-color: #0ff;
         }
 
+        .button-28 {
+            appearance: none;
+            background-color: transparent;
+            border: 1px solid #0ff;
+            border-radius: 15px;
+            box-sizing: border-box;
+            color: #0ff;
+            cursor: pointer;
+            display: inline-block;
+            font-family: Roobert, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+            font-size: 16px;
+            font-weight: 600;
+            line-height: normal;
+            margin: 0;
+            min-height: 60px;
+            min-width: fit-content;
+            outline: none;
+            padding: 16px 24px;
+            text-align: center;
+            text-decoration: none;
+            transition: all 300ms cubic-bezier(.23, 1, 0.32, 1);
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: manipulation;
+            width: 100px;
+            will-change: transform;
+        }
+
+        .button-28:disabled {
+            pointer-events: none;
+        }
+
+        .button-28:hover {
+            color: #0ff;
+            background-color: #1A1A1A;
+            box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
+            transform: translateY(-2px);
+        }
+
+        .button-28:active {
+            box-shadow: none;
+            transform: translateY(0);
+        }
+
         footer {
             padding: 20px;
         }
@@ -101,6 +146,8 @@
     </style>
 
     <script>
+        let prediction;
+
         function getSurveyComponents() {
 
             // Get the search parameters from the URL
@@ -122,6 +169,7 @@
                 console.log('⏰ Deadline:', alarmclock);
                 console.log('🔮 Oracle: ', oracle);
 
+                // check if the required parameters where supplied
                 if (dolphin === null) {
                     document.getElementById('🐬').innerHTML = "Missing 🐬 in URL.";
                     return 0;
@@ -157,6 +205,7 @@
                     }
                 }
 
+                // if there are not at least two options, then the survey is not valid
                 if (options.length < 2) {
                     document.getElementById('⏰').innerHTML = '';
                     document.getElementById('🔮').innerHTML = '';
@@ -171,6 +220,10 @@
                 console.log(message)
             }
             return 1;
+        }
+
+        function generatePrediction() {
+            document.getElementById("prediction").innerText = "You selected " + prediction;
         }
 
         function setOptions(optionsArray) {
@@ -191,6 +244,19 @@
 
                 optionsContainer.appendChild(paragraphElement);
             }
+
+            const radioButtons = document.querySelectorAll('input[type="radio"]');
+
+            // Add event listener to each radio button
+            radioButtons.forEach(button => {
+                button.addEventListener('change', () => {
+                    // Check which radio button is selected
+                    if (button.checked) {
+                        console.log('Selected option:', button.value);
+                        prediction = button.value;
+                    }
+                });
+            });
         }
 
         function convertUTCtoDate(utcTimestamp) {
@@ -223,6 +289,11 @@
     <fieldset id="🗳">
         <legend>Select an option:</legend>
     </fieldset>
+
+    <div>
+        <button class="button-28" onclick="generatePrediction()">Post Your Prediction!</button>
+        <p id="prediction"></p>
+    </div>
 
     <p id="⏰"></p>
     <p id="🔮"></p>
