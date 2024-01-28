@@ -69,7 +69,7 @@
             border: 1px solid #0ff;
             border-radius: 15px;
             box-sizing: border-box;
-            color: black;
+            color: #0ff;
             cursor: pointer;
             display: inline-block;
             font-family: Roobert, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
@@ -161,6 +161,8 @@
         const urlEncodedCrystalBall = '%F0%9F%94%AE';
         const urlEncodedBallotBox = '%F0%9F%97%B3';
 
+        let optionCounter = 2;
+
         function generateLink() {
             const dolphin = document.getElementById('🐬input').value;
             const date = document.getElementById('⏰date').value;
@@ -184,11 +186,15 @@
                 return 0;
             }
 
-            const surveyURL = urlPrefix + urlEncodedDolphin + "=" + dolphin.replace(/\s+/g, '-') + '&' +
+            let surveyURL = urlPrefix + urlEncodedDolphin + "=" + dolphin.replace(/\s+/g, '-') + '&' +
                 urlEncodedAlarmClock + '=' + deadline + '&' +
-                urlEncodedCrystalBall + '=' + oracle.replace(/\s+/g, '-') + '&' +
-                urlEncodedBallotBox + '1=' + option1.replace(/\s+/g, '-') + '&' +
-                urlEncodedBallotBox + '2=' + option2.replace(/\s+/g, '-');
+                urlEncodedCrystalBall + '=' + oracle.replace(/\s+/g, '-');
+
+            for (let i = 0; i < optionCounter; i++) {
+                let option = document.getElementById('🗳' + (i+1) + 'input').value;
+                console.log("option: ", option);
+                surveyURL = surveyURL + '&' + urlEncodedBallotBox + (i+1) + '=' + option.replace(/\s+/g, '-')
+            }
             console.log("Survey URL:", surveyURL);
 
             document.getElementById('surveyURL').innerHTML = surveyURL.slice(0, 50) + "...";
@@ -196,6 +202,25 @@
             document.getElementById('note').innerHTML = "Share your new survey anywhere!";
 
             return 1;
+        }
+
+        function addAnotherOption() {
+            optionCounter = optionCounter + 1;
+            let optionsContainer = document.getElementById('🗳')
+
+            // add a paragraph element to the options container
+            let paragraphElement = document.createElement('p');
+            paragraphElement.textContent = '🗳' + optionCounter + ': ';
+            optionsContainer.appendChild(paragraphElement);
+
+            // add a text field to the new paragraph element
+            // <input type="text" id="🗳1input" placeholder="Enter an outcome...">
+            let inputElement = document.createElement('input');
+            inputElement.setAttribute('type', 'text');
+            inputElement.setAttribute('id', '🗳' + optionCounter + 'input');
+            inputElement.setAttribute('placeholder', "Enter an outcome...");
+            paragraphElement.appendChild(inputElement);
+            console.log("Option Counter:", optionCounter);
         }
 
         function dateTimeToTimestamp(dateString, timeString) {
@@ -265,6 +290,7 @@
             🗳2: <input type="text" id="🗳2input" placeholder="Enter an outcome...">
         </p>
     </div>
+    <button class="button-28" id="add-option" onclick="addAnotherOption()">Add</button>
 
     <div>
         <h2>
