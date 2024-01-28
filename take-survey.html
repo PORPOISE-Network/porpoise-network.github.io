@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="keywords"
+        content="PORPOISE, Proof of Reputation, Protocol, zero knowledge proof, zkSNARK, crypto, Mina Protocol, Protokit, surveys, predictions">
+    <meta name="description" content="Proof of Reputation Protocol">
+    <title>PORPOISE Network</title>
+
+    <style>
+        body {
+            background-color: #000;
+            color: #0ff;
+            /* Light blue font color */
+            font-family: 'Courier New', monospace;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            padding: 50px;
+        }
+
+        h1 {
+            font-size: 3em;
+            margin: 10px;
+        }
+
+        p {
+            font-size: 1.2em;
+            margin: 20px;
+        }
+
+        /* visited link */
+        a[href]:visited {
+            color: #00d0ff;
+        }
+
+        /* mouse over link */
+        a[href]:hover {
+            color: #00ddff;
+        }
+
+        /* unvisited link */
+        a[href] {
+            color: #0ff;
+            text-decoration: none;
+        }
+
+        footer {
+            padding: 20px;
+        }
+
+        header img {
+            width: 2.5em;
+            /* Set the width to match the font size */
+            height: 1em;
+            /* Set the height to match the font size */
+        }
+    </style>
+
+    <script>
+        function getSurveyComponents() {
+
+            // Get the search parameters from the URL
+            const urlParams = new URLSearchParams(window.location.search);
+
+            const numParams = urlParams.size;
+            console.log("URL Params: ", urlParams);
+
+            if (numParams >= 5) {
+                const numOptions = numParams - 3;
+                console.log("Number of options: ", numOptions);
+
+                // Retrieve the body, deadline, and oracle content
+                const dolphin = urlParams.get('🐬');
+                const alarmclock = urlParams.get('⏰');
+                const oracle = urlParams.get('🔮')
+
+                console.log('🐬 Dolphin:', dolphin);
+                console.log('⏰ Deadline:', alarmclock);
+                console.log('🔮 Oracle: ', oracle);
+
+                document.getElementById('🐬').innerHTML = '🐬 ' + dolphin.replace(/-/g, ' ');
+                document.getElementById('⏰').innerHTML = '⏰ Deadline: ' + convertUTCtoDate(alarmclock);
+                document.getElementById('🔮').innerHTML = '🔮 Oracle Address: ' + oracle;
+
+                // loop over the options and store in an options array
+                let optionsContainer = document.getElementById('🗳')
+                for (let i = 1; i <= numOptions; i++) {
+                    let option = urlParams.get('🗳' + i);
+                    console.log("Option", i, ": ", option);
+                    let paragraphElement = document.createElement('p');
+                    paragraphElement.textContent = '🗳' + i + ". " + option.replace(/-/g, ' ');
+                    optionsContainer.appendChild(paragraphElement);
+                }
+            } else {
+                console.log("Not enough query params for a PORPOISE-compatible survey.")
+            }
+        }
+
+        function convertUTCtoDate(utcTimestamp) {
+            // Create a new Date object with the UTC timestamp
+            // the UTC timestamp should be in miliseconds
+            const date = new Date(parseInt(utcTimestamp, 10));
+
+            // Get the individual components of the date and time
+            const year = date.getUTCFullYear();
+            const month = date.getUTCMonth() + 1; // Months are zero-indexed, so add 1
+            const day = date.getUTCDate();
+            const hours = date.getUTCHours();
+            const minutes = date.getUTCMinutes();
+            const seconds = date.getUTCSeconds();
+
+            const formattedDateTime = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+
+            return formattedDateTime;
+        }
+    </script>
+</head>
+
+<body onload="getSurveyComponents();">
+    <header>
+        <h1><a href="/">PORPOISE</a> Survey:</h1>
+    </header>
+
+    <h2 id="🐬"></h2>
+
+    <div id="🗳"></div>
+
+    <p id="⏰"></p>
+    <p id="🔮"></p>
+
+    <footer>
+        <p>
+            &copy; 2024 PORPOISE Network. All rights reserved.
+        </p>
+    </footer>
+</body>
+
+</html>
