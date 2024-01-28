@@ -149,7 +149,7 @@
         let prediction;
         let surveyLeafs = [];
         let paddedSurveyLeafs;
-        let surveyRoot; 
+        let surveyRoot;
 
         function getSurveyComponents() {
 
@@ -220,7 +220,7 @@
                     return 0;
                 } else {
                     setOptions(options);
-                    paddedSurveyLeafs = padArrayToPowerOfTwo(surveyLeafs,'0');
+                    paddedSurveyLeafs = padArrayToPowerOfTwo(surveyLeafs, '0');
                     computeMerkleRoot(paddedSurveyLeafs).then((root) => {
                         console.log("Merkle Root: ", root);
                         surveyRoot = root;
@@ -235,9 +235,15 @@
         }
 
         function generatePrediction() {
-            const predictionHash = hashString(prediction)
-            console.log("Prediction Hash: ", predictionHash);
-            document.getElementById("prediction").innerText = "Merkle Root: " + surveyRoot;
+            // hash the prediction
+            hashString(prediction).then((predictionHash) => {
+                console.log("Prediction Hash: ", predictionHash);
+                const predictionSalt = generateRandomString(18);
+                console.log("Prediction Salt: ", predictionSalt);
+                hashString(predictionSalt + predictionHash + surveyRoot).then((predictionCommitment) => {
+                    document.getElementById("prediction").innerText = "Prediction Commitment: " + predictionCommitment;
+                });
+            })
         }
 
         function setOptions(optionsArray) {
