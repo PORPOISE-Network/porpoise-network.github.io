@@ -51,6 +51,43 @@
             text-decoration: none;
         }
 
+        fieldset {
+            border: 1px solid #0ff;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 20px;
+            width: max-content;
+            align-items: center;
+            justify-content: center;
+            display: inline;
+        }
+
+        legend {
+            font-size: 18px;
+            color: #0ff;
+            margin-bottom: 10px;
+        }
+
+        input[type="radio"] {
+            margin-right: 8px;
+            appearance: none;
+            /* Remove default radio button appearance */
+            width: 18px;
+            height: 18px;
+            border: 2px solid #0ff;
+            border-radius: 50%;
+            /* Make it round */
+            outline: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        /* Style the radio button when checked */
+        input[type="radio"]:checked {
+            background-color: #0ff;
+            border-color: #0ff;
+        }
+
         footer {
             padding: 20px;
         }
@@ -116,7 +153,7 @@
                 for (let i = 1; i <= numOptions; i++) {
                     let option = urlParams.get('🗳' + i);
                     if (option !== null) {
-                        options.push(option.replace(/-/g, ' '));
+                        options.push(option);
                     }
                 }
 
@@ -142,7 +179,16 @@
             for (let i = 0; i < optionsArray.length; i++) {
                 console.log("Option", i, ": ", optionsArray[i]);
                 let paragraphElement = document.createElement('p');
-                paragraphElement.textContent = '🗳' + (i + 1) + ". " + optionsArray[i];
+                paragraphElement.innerText = '🗳' + (i + 1) + ". " + optionsArray[i].replace(/-/g, ' ');
+
+                let inputElement = document.createElement('input');
+                inputElement.setAttribute('type', 'radio');
+                inputElement.setAttribute('name', 'options');
+                inputElement.setAttribute('value', optionsArray[i]);
+                inputElement.setAttribute('id', '🗳' + (i + 1) + 'input');
+                paragraphElement.appendChild(inputElement);
+
+
                 optionsContainer.appendChild(paragraphElement);
             }
         }
@@ -174,7 +220,9 @@
 
     <h2 id="🐬"></h2>
 
-    <div id="🗳"></div>
+    <fieldset id="🗳">
+        <legend>Select an option:</legend>
+    </fieldset>
 
     <p id="⏰"></p>
     <p id="🔮"></p>
