@@ -147,6 +147,9 @@
 
     <script>
         let prediction;
+        let surveyLeafs = [];
+        let paddedSurveyLeafs;
+        let surveyRoot; 
 
         function getSurveyComponents() {
 
@@ -175,6 +178,7 @@
                     return 0;
                 } else {
                     document.getElementById('🐬').innerHTML = '🐬 ' + dolphin.replace(/-/g, ' ');
+                    surveyLeafs.push(dolphin);
                 }
 
                 if (alarmclock === null) {
@@ -182,6 +186,7 @@
                     return 0;
                 } else {
                     document.getElementById('⏰').innerHTML = '⏰ Deadline: ' + convertUTCtoDate(alarmclock);
+                    surveyLeafs.push(alarmclock);
                 }
 
                 if (oracle === null) {
@@ -194,6 +199,7 @@
                     } else {
                         document.getElementById('🔮').innerHTML = '🔮 Oracle Address: ' + oracle;
                     }
+                    surveyLeafs.push(oracle);
                 }
 
                 // loop over the options and store in an options array
@@ -202,6 +208,7 @@
                     let option = urlParams.get('🗳' + i);
                     if (option !== null) {
                         options.push(option);
+                        surveyLeafs.push(option);
                     }
                 }
 
@@ -213,6 +220,11 @@
                     return 0;
                 } else {
                     setOptions(options);
+                    paddedSurveyLeafs = padArrayToPowerOfTwo(surveyLeafs,'0');
+                    computeMerkleRoot(paddedSurveyLeafs).then((root) => {
+                        console.log("Merkle Root: ", root);
+                        surveyRoot = root;
+                    })
                 }
             } else {
                 const message = "Not enough emojis for a PORPOISE-compatible survey."
@@ -223,7 +235,9 @@
         }
 
         function generatePrediction() {
-            document.getElementById("prediction").innerText = "You selected " + prediction;
+            const predictionHash = hashString(prediction)
+            console.log("Prediction Hash: ", predictionHash);
+            document.getElementById("prediction").innerText = "Merkle Root: " + surveyRoot;
         }
 
         function setOptions(optionsArray) {
@@ -275,6 +289,69 @@
             const formattedDateTime = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 
             return formattedDateTime;
+        }
+
+        function generateRandomString(length) {
+            const charset = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+            let randomString = '';
+
+            for (let i = 0; i < length; i++) {
+                const randomIndex = Math.floor(Math.random() * charset.length);
+                randomString += charset[randomIndex];
+            }
+
+            return randomString;
+        }
+
+        function padArrayToPowerOfTwo(arr, paddingValue) {
+            // Check if the array length is already a power of 2
+            if ((arr.length & (arr.length - 1)) === 0) {
+                return arr; // Array length is already a power of 2, no padding needed
+            }
+
+            // Calculate the next power of 2 greater than the current length
+            const nextPowerOfTwo = Math.pow(2, Math.ceil(Math.log2(arr.length)));
+
+            // Calculate the number of elements to pad
+            const paddingCount = nextPowerOfTwo - arr.length;
+
+            // Pad the array with the specified paddingValue (default is undefined)
+            return arr.concat(new Array(paddingCount).fill(paddingValue));
+        }
+
+        // Function to compute the Merkle root hash from an array of strings
+        async function computeMerkleRoot(strings) {
+            if (strings.length === 0) {
+                return null;
+            }
+
+            // Base case: if there's only one element, return its hash
+            if (strings.length === 1) {
+                return await hashString(strings[0]);
+            }
+
+            // Recursive case: compute hash of pairs until a single hash is obtained
+            const pairedHashes = [];
+            for (let i = 0; i < strings.length; i += 2) {
+                const left = strings[i];
+                const right = (i + 1 < strings.length) ? strings[i + 1] : '';
+                const pairHash = await hashString(left + right);
+                pairedHashes.push(pairHash);
+            }
+
+            // Recursively compute the Merkle root for the paired hashes
+            return await computeMerkleRoot(pairedHashes);
+        }
+
+        // Function to hash a string (use any suitable hash function)
+        function hashString(str) {
+            const encoder = new TextEncoder();
+            const data = encoder.encode(str);
+
+            return crypto.subtle.digest('SHA-256', data).then(hashBuffer => {
+                const hashArray = Array.from(new Uint8Array(hashBuffer));
+                return hashArray.map(byte => byte.toString(16).padStart(2, '0')).join('');
+            });
         }
     </script>
 </head>
