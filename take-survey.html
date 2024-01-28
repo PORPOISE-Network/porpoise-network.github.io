@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="keywords"
         content="PORPOISE, Proof of Reputation, Protocol, zero knowledge proof, zkSNARK, crypto, Mina Protocol, Protokit, surveys, predictions">
-    <meta name="description" content="Proof of Reputation Protocol">
+    <meta name="description" content="Take a PORPOISE Survey">
     <title>PORPOISE Network</title>
 
     <style>
@@ -104,7 +104,11 @@
                     document.getElementById('🐬').innerHTML = "Missing 🔮 in URL.";
                     return 0;
                 } else {
-                    document.getElementById('🔮').innerHTML = '🔮 Oracle Address: ' + oracle;
+                    if (oracle === '0') {
+                        document.getElementById('🔮').innerHTML = '🔮 Oracle Address: No oracle for this survey.';
+                    } else {
+                        document.getElementById('🔮').innerHTML = '🔮 Oracle Address: ' + oracle;
+                    }
                 }
 
                 // loop over the options and store in an options array
@@ -138,7 +142,7 @@
             for (let i = 0; i < optionsArray.length; i++) {
                 console.log("Option", i, ": ", optionsArray[i]);
                 let paragraphElement = document.createElement('p');
-                paragraphElement.textContent = '🗳' + (i+1) + ". " + optionsArray[i];
+                paragraphElement.textContent = '🗳' + (i + 1) + ". " + optionsArray[i];
                 optionsContainer.appendChild(paragraphElement);
             }
         }

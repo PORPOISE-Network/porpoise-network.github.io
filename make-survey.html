@@ -51,6 +51,96 @@
             text-decoration: none;
         }
 
+        input[type="text"] {
+            padding: 8px;
+            font-size: 16px;
+            width: 200px;
+            border: 1px solid #0ff;
+            border-radius: 4px;
+            box-sizing: border-box;
+            background-color: black;
+            color: #0ff;
+        }
+
+        /* CSS */
+        .button-28 {
+            appearance: none;
+            background-color: transparent;
+            border: 1px solid #0ff;
+            border-radius: 15px;
+            box-sizing: border-box;
+            color: black;
+            cursor: pointer;
+            display: inline-block;
+            font-family: Roobert, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+            font-size: 16px;
+            font-weight: 600;
+            line-height: normal;
+            margin: 0;
+            min-height: 60px;
+            min-width: 0;
+            outline: none;
+            padding: 16px 24px;
+            text-align: center;
+            text-decoration: none;
+            transition: all 300ms cubic-bezier(.23, 1, 0.32, 1);
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: manipulation;
+            width: 100px;
+            will-change: transform;
+        }
+
+        .button-28:disabled {
+            pointer-events: none;
+        }
+
+        .button-28:hover {
+            color: #0ff;
+            background-color: #1A1A1A;
+            box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
+            transform: translateY(-2px);
+        }
+
+        .button-28:active {
+            box-shadow: none;
+            transform: translateY(0);
+        }
+
+        input[type="time"] {
+            padding: 8px;
+            font-size: 16px;
+            width: 200px;
+            border: 1px solid #0ff;
+            border-radius: 4px;
+            box-sizing: border-box;
+            background-color: black;
+            color: #0ff;
+        }
+
+        input[type="date"] {
+            padding: 8px;
+            font-size: 16px;
+            width: 200px;
+            border: 1px solid #0ff;
+            border-radius: 4px;
+            box-sizing: border-box;
+            background-color: black;
+            color: #0ff;
+            cursor: pointer;
+        }
+
+        select {
+            padding: 8px;
+            font-size: 16px;
+            width: 200px;
+            border: 1px solid #0ff;
+            border-radius: 4px;
+            box-sizing: border-box;
+            background-color: #000;
+            color: #0ff
+        }
+
         footer {
             padding: 20px;
         }
@@ -86,7 +176,7 @@
             console.log("Option1: ", option1);
             console.log("Option2: ", option2);
 
-            const deadline = dateTimeToTimestamp(date,time);
+            const deadline = dateTimeToTimestamp(date, time);
             console.log("Deadline: ", deadline);
 
             if (dolphin === '' || date === '' || time === '' || oracle === '' || option1 === '' || option2 === '') {
@@ -95,14 +185,15 @@
             }
 
             const surveyURL = urlPrefix + urlEncodedDolphin + "=" + dolphin.replace(/\s+/g, '-') + '&' +
-            urlEncodedAlarmClock + '=' + deadline + '&' +
-            urlEncodedCrystalBall + '=' + oracle.replace(/\s+/g, '-') + '&' +
-            urlEncodedBallotBox + '1=' + option1.replace(/\s+/g, '-') + '&' +
-            urlEncodedBallotBox + '2=' + option2.replace(/\s+/g, '-');
+                urlEncodedAlarmClock + '=' + deadline + '&' +
+                urlEncodedCrystalBall + '=' + oracle.replace(/\s+/g, '-') + '&' +
+                urlEncodedBallotBox + '1=' + option1.replace(/\s+/g, '-') + '&' +
+                urlEncodedBallotBox + '2=' + option2.replace(/\s+/g, '-');
             console.log("Survey URL:", surveyURL);
 
-            document.getElementById('surveyURL').innerHTML = surveyURL.slice(0,50) + "...";
+            document.getElementById('surveyURL').innerHTML = surveyURL.slice(0, 50) + "...";
             document.getElementById('surveyLink').setAttribute('href', surveyURL);
+            document.getElementById('note').innerHTML = "Share your new survey anywhere!";
 
             return 1;
         }
@@ -157,8 +248,12 @@
     </div>
 
     <div id="🔮">
-        <h2>Enter a contract address that will serve as the event result oracle.</h2>
-        🔮: <input type="text" id="🔮input" placeholder="Enter an address...">
+        <h2>Choose an oracle to tie to your survey.</h2>
+        <label for="🔮select">🔮:</label>
+        <select id="🔮input" name="🔮select">
+            <option value="0">No oracle needed (bounties cannot be linked to this survey)</option>
+            <option value="0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045">Porpoise Oracle</option>
+        </select>
     </div>
 
     <div id="🗳">
@@ -175,8 +270,11 @@
         <h2>
             Generate Survey Link
         </h2>
-        <button onclick="generateLink()">🐬!</button>
-        <a id="surveyLink" target="_blank"><p id="surveyURL"></p></a>
+        <button class="button-28" onclick="generateLink()">🐬!</button>
+        <a id="surveyLink" target="_blank">
+            <p id="surveyURL"></p>
+        </a>
+        <p id="note"></p>
     </div>
 
     <footer>
