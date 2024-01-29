@@ -151,6 +151,9 @@
         let paddedSurveyLeafs;
         let surveyRoot;
 
+        const urlPrefix = 'https://porpoise.network/take-survey.html?';
+        const urlEncodedLock = '%F0%9F%94%92'
+
         function getSurveyComponents() {
 
             // Get the search parameters from the URL
@@ -227,7 +230,7 @@
                     })
                 }
             } else {
-                const message = "Not enough emojis for a PORPOISE-compatible survey."
+                const message = "Not enough emojis for a PORPOISE-compatible survey: " + window.location.search;
                 document.getElementById('🐬').innerHTML = message;
                 console.log(message)
             }
@@ -377,6 +380,8 @@
         <button class="button-28" onclick="generatePrediction()">Post Your Prediction!</button>
         <p id="prediction"></p>
     </div>
+
+    <a href="https://twitter.com/intent/tweet?button_hashtag=zkporpoise&ref_src=twsrc%5Etfw" class="twitter-hashtag-button" data-show-count="false">Tweet #zkporpoise</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 
     <p id="⏰"></p>
     <p id="🔮"></p>
