@@ -188,7 +188,7 @@
             console.log("Option1: ", option1);
             console.log("Option2: ", option2);
 
-            const deadline = dateTimeToTimestamp(date, time);
+            const deadline = localDateTimeToUTCTimestamp(date, time);
             console.log("Deadline: ", deadline);
 
             if (dolphin === '' || date === '' || time === '' || oracle === '' || option1 === '' || option2 === '') {
@@ -233,9 +233,9 @@
             console.log("Option Counter:", optionCounter);
         }
 
-        function dateTimeToTimestamp(dateString, timeString) {
+        function localDateTimeToUTCTimestamp(dateString, timeString) {
             // Combine the date and time strings into a single string
-            const combinedDateTimeString = `${dateString}T${timeString}:00Z`;
+            const combinedDateTimeString = `${dateString}T${timeString}:00`;
 
             // Create a Date object from the combined string (assuming the input is in "YYYY-MM-DDTHH:mm" format)
             const dateTime = new Date(combinedDateTimeString);
@@ -243,25 +243,8 @@
             // Get the UTC timestamp in milliseconds
             const utcTimestamp = dateTime.getTime();
 
+            //Milliseconds since dateSTring + timestring
             return utcTimestamp;
-        }
-
-        function convertUTCtoDate(utcTimestamp) {
-            // Create a new Date object with the UTC timestamp
-            // the UTC timestamp should be in miliseconds
-            const date = new Date(parseInt(utcTimestamp, 10));
-
-            // Get the individual components of the date and time
-            const year = date.getUTCFullYear();
-            const month = date.getUTCMonth() + 1; // Months are zero-indexed, so add 1
-            const day = date.getUTCDate();
-            const hours = date.getUTCHours();
-            const minutes = date.getUTCMinutes();
-            const seconds = date.getUTCSeconds();
-
-            const formattedDateTime = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-
-            return formattedDateTime;
         }
     </script>
 </head>
@@ -289,6 +272,7 @@
 
     <div id="⏰">
         <h2>Pick a deadline for predictions to be committed.</h2>
+        <p>(In your local time)</p>
         <label for="⏰date">⏰:</label><input type="date" id="⏰date" name="myDate"> <input type="time" id="⏰time"
             name="time">
     </div>
