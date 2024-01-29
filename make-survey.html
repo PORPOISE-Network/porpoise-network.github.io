@@ -28,11 +28,18 @@
         h1 {
             font-size: 3em;
             margin: 10px;
+            max-width: 100%;
+        }
+
+        h2 {
+            font-size: 1.5em;
+            max-width: 100%;
         }
 
         p {
             font-size: 1.2em;
             margin: 20px;
+            max-width: 100%;
         }
 
         /* visited link */
@@ -55,6 +62,7 @@
             padding: 8px;
             font-size: 16px;
             width: 200px;
+            max-width: 100%;
             border: 1px solid #0ff;
             border-radius: 4px;
             box-sizing: border-box;
@@ -111,6 +119,7 @@
             padding: 8px;
             font-size: 16px;
             width: 200px;
+            max-width: 35%;
             border: 1px solid #0ff;
             border-radius: 4px;
             box-sizing: border-box;
@@ -122,6 +131,7 @@
             padding: 8px;
             font-size: 16px;
             width: 200px;
+            max-width: 35%;
             border: 1px solid #0ff;
             border-radius: 4px;
             box-sizing: border-box;
@@ -266,6 +276,17 @@
         🐬: <input type="text" id="🐬input" placeholder="Enter text...">
     </div>
 
+    <div id="🗳">
+        <h2>Set event outcome options:</h2>
+        <p id="🗳1">
+            🗳1: <input type="text" id="🗳1input" placeholder="Enter an outcome...">
+        </p>
+        <p id="🗳2">
+            🗳2: <input type="text" id="🗳2input" placeholder="Enter an outcome...">
+        </p>
+    </div>
+    <button class="button-28" id="add-option" onclick="addAnotherOption()">Add</button>
+
     <div id="⏰">
         <h2>Pick a deadline for predictions to be committed.</h2>
         <label for="⏰date">⏰:</label><input type="date" id="⏰date" name="myDate"> <input type="time" id="⏰time"
@@ -280,17 +301,6 @@
             <option value="0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045">Porpoise Oracle</option>
         </select>
     </div>
-
-    <div id="🗳">
-        <h2>Set event outcome options:</h2>
-        <p id="🗳1">
-            🗳1: <input type="text" id="🗳1input" placeholder="Enter an outcome...">
-        </p>
-        <p id="🗳2">
-            🗳2: <input type="text" id="🗳2input" placeholder="Enter an outcome...">
-        </p>
-    </div>
-    <button class="button-28" id="add-option" onclick="addAnotherOption()">Add</button>
 
     <div>
         <h2>
