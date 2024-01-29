@@ -159,7 +159,7 @@
             // Get the search parameters from the URL
             //const urlParams = new URLSearchParams(window.location.search);
             const queryString = window.location.search;
-            const urlParams = parseQueryString(queryString.slice(1,queryString.size));
+            const urlParams = parseQueryString(queryString.slice(1, queryString.size));
 
             const numParams = Object.keys(urlParams).length;
             console.log("URL Params: ", urlParams);
@@ -240,6 +240,8 @@
             return 1;
         }
 
+        // we need this function because there seem to be a lot of mobile browsers
+        // that don't like URLSearchParams
         function parseQueryString(queryString) {
 
             if (!queryString) {
@@ -268,7 +270,7 @@
                 const predictionSalt = generateRandomString(18);
                 console.log("Prediction Salt: ", predictionSalt);
                 hashString(predictionSalt + predictionHash + surveyRoot).then((predictionCommitment) => {
-                    document.getElementById("prediction").innerText = "Prediction Commitment: " + predictionCommitment;
+                    document.getElementById("prediction").innerText = "Prediction Commitment: " + predictionCommitment + " Prediction Salt: " + predictionSalt;
                 });
             })
         }
@@ -405,8 +407,10 @@
         <p id="prediction"></p>
     </div>
 
-    <a href="https://twitter.com/intent/tweet?button_hashtag=zkporpoise&ref_src=twsrc%5Etfw"
-        class="twitter-hashtag-button" data-show-count="false">Tweet #zkporpoise</a>
+    <a href="https://twitter.com/intent/tweet?button_hashtag=PORPOISENetwork&ref_src=twsrc%5Etfw"
+        class="twitter-hashtag-button" data-size="large" id="tweet-button"
+        data-text="I made a prediction with PORPOISE: " data-related="zkporpoise" data-show-count="false">Tweet
+        #PORPOISENetwork</a>
     <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 
     <p id="⏰"></p>
