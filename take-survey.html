@@ -152,16 +152,18 @@
                         copyPredictionElement.setAttribute('class', 'button-28');
                         copyPredictionElement.setAttribute('id', 'prediction-commitment-📋');
                         copyPredictionElement.setAttribute('value', predictionHash);
+                        copyPredictionElement.setAttribute('onclick', 'copyCommitment()')
                         copyPredictionElement.innerText = '📋';
                         predictionElement.appendChild(copyPredictionElement);
 
                         let saltElement = document.getElementById("salt");
-                        saltElement.innerText = "🧂: " + predictionSalt.slice(0, 5) + '...  ';
+                        saltElement.innerText = "🧂: " + predictionSalt.slice(0, 13) + '...  ';
                         saltElement.title = "Kind of like a password that helps you reveal your prediction commitment later."
                         let copySaltElement = document.createElement('button');
                         copySaltElement.setAttribute('class', 'button-28');
                         copySaltElement.setAttribute('id', 'prediction-🧂-📋');
                         copySaltElement.setAttribute('value', predictionSalt);
+                        copySaltElement.setAttribute('onclick', 'copySalt()')
                         copySaltElement.innerText = '📋';
                         saltElement.appendChild(copySaltElement);
 
@@ -170,6 +172,54 @@
                     });
                 })
             }
+        }
+
+        function copyCommitment() {
+            // Get the button element
+            const button = document.getElementById('prediction-commitment-📋');
+
+            // Create a temporary textarea
+            const textarea = document.createElement('textarea');
+            textarea.value = button.value; // Use textContent instead of value
+
+            // Append the textarea to the document
+            document.body.appendChild(textarea);
+
+            // Select the text in the textarea
+            textarea.select();
+            textarea.setSelectionRange(0, 99999); // For mobile devices
+
+            // Copy the selected text to the clipboard
+            document.execCommand('copy');
+
+            // Remove the temporary textarea
+            document.body.removeChild(textarea);
+
+            button.innerText = '✅';
+        }
+
+        function copySalt() {
+            // Get the button element
+            const button = document.getElementById('prediction-🧂-📋');
+
+            // Create a temporary textarea
+            const textarea = document.createElement('textarea');
+            textarea.value = button.value; // Use textContent instead of value
+
+            // Append the textarea to the document
+            document.body.appendChild(textarea);
+
+            // Select the text in the textarea
+            textarea.select();
+            textarea.setSelectionRange(0, 99999); // For mobile devices
+
+            // Copy the selected text to the clipboard
+            document.execCommand('copy');
+
+            // Remove the temporary textarea
+            document.body.removeChild(textarea);
+
+            button.innerText = '✅';
         }
 
         function savePrediction(prediction, predictionSalt, predictionCommitment) {
