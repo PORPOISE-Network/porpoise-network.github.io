@@ -10,148 +10,7 @@
     <meta name="description" content="Take a PORPOISE Survey">
     <title>PORPOISE Network</title>
 
-    <style>
-        body {
-            background-color: #000;
-            color: #0ff;
-            /* Light blue font color */
-            font-family: 'Courier', monospace;
-            text-align: center;
-            margin: 0;
-            padding: 0;
-            font-family: "Courier New", Courier, monospace;
-        }
-
-        header {
-            padding: 50px;
-            max-width: 100%;
-        }
-
-        h1 {
-            font-size: 3em;
-            margin: 10px;
-        }
-
-        h2 {
-            font-size: 1.5em;
-            max-width: 100%;
-        }
-
-        p {
-            font-size: 1.2em;
-            margin: 20px;
-            max-width: 100%;
-        }
-
-        /* visited link */
-        a[href]:visited {
-            color: #00d0ff;
-        }
-
-        /* mouse over link */
-        a[href]:hover {
-            color: #00ddff;
-        }
-
-        /* unvisited link */
-        a[href] {
-            color: #0ff;
-            text-decoration: none;
-        }
-
-        fieldset {
-            border: 1px solid #0ff;
-            border-radius: 8px;
-            padding: 16px;
-            margin-bottom: 20px;
-            width: max-content;
-            max-width: 100%;
-            align-items: center;
-            justify-content: center;
-            display: inline;
-        }
-
-        legend {
-            font-size: 18px;
-            color: #0ff;
-            margin-bottom: 10px;
-        }
-
-        input[type="radio"] {
-            margin-right: 8px;
-            appearance: none;
-            /* Remove default radio button appearance */
-            width: 18px;
-            height: 18px;
-            border: 2px solid #0ff;
-            border-radius: 50%;
-            /* Make it round */
-            outline: none;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
-        /* Style the radio button when checked */
-        input[type="radio"]:checked {
-            background-color: #0ff;
-            border-color: #0ff;
-        }
-
-        .button-28 {
-            appearance: none;
-            background-color: transparent;
-            border: 1px solid #0ff;
-            border-radius: 15px;
-            box-sizing: border-box;
-            color: #0ff;
-            cursor: pointer;
-            display: inline-block;
-            font-family: Roobert, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-            font-size: 16px;
-            font-weight: 600;
-            line-height: normal;
-            margin: 0;
-            min-height: 60px;
-            min-width: fit-content;
-            outline: none;
-            padding: 16px 24px;
-            text-align: center;
-            text-decoration: none;
-            transition: all 300ms cubic-bezier(.23, 1, 0.32, 1);
-            user-select: none;
-            -webkit-user-select: none;
-            touch-action: manipulation;
-            width: 100px;
-            will-change: transform;
-        }
-
-        .button-28:disabled {
-            pointer-events: none;
-        }
-
-        .button-28:hover {
-            color: #0ff;
-            background-color: #1A1A1A;
-            box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
-            transform: translateY(-2px);
-        }
-
-        .button-28:active {
-            box-shadow: none;
-            transform: translateY(0);
-        }
-
-        footer {
-            padding: 20px;
-        }
-
-        header img {
-            width: 2.5em;
-            /* Set the width to match the font size */
-            height: 1em;
-            /* Set the height to match the font size */
-        }
-    </style>
+    <link rel="stylesheet" href="take-survey.css">
 
     <script>
         let prediction;
@@ -160,7 +19,9 @@
         let surveyRoot;
 
         const urlPrefix = 'https://porpoise.network/take-survey.html?';
-        const urlEncodedLock = '%F0%9F%94%92'
+        const urlEncodedDoor = '%F0%9F%9A%AA';
+        const urlEncodedSalt = '%F0%9F%A7%82';
+        const urlEncodedCheck = '%E2%9C%94';
 
         function getSurveyComponents() {
 
@@ -219,7 +80,7 @@
                 const options = [];
                 for (let i = 1; i <= numOptions; i++) {
                     let option = urlParams['🗳' + i];
-                    if (option !== null) {
+                    if (option !== undefined) {
                         options.push(option);
                         surveyLeafs.push(option);
                     }
@@ -273,14 +134,51 @@
 
         function generatePrediction() {
             // hash the prediction
-            hashString(prediction).then((predictionHash) => {
-                console.log("Prediction Hash: ", predictionHash);
-                const predictionSalt = generateRandomString(18);
-                console.log("Prediction Salt: ", predictionSalt);
-                hashString(predictionSalt + predictionHash + surveyRoot).then((predictionCommitment) => {
-                    document.getElementById("prediction").innerText = "Prediction Commitment: " + predictionCommitment + " Prediction Salt: " + predictionSalt;
-                });
-            })
+            if (prediction === undefined) {
+                document.getElementById("prediction").innerText = "You must make a prediction first!"
+                return 0;
+            } else {
+                hashString(prediction).then((predictionHash) => {
+                    console.log("Prediction Hash: ", predictionHash);
+                    const predictionSalt = generateRandomString(18);
+                    console.log("Prediction Salt: ", predictionSalt);
+                    hashString(predictionSalt + predictionHash + surveyRoot).then((predictionCommitment) => {
+
+                        let predictionElement = document.getElementById("prediction");
+                        predictionElement.innerHTML = "Commitment: " + predictionCommitment.slice(0, 10) + '...  ';
+                        predictionElement.title = "Commits you to a specific prediction. Post it somewhere to build your reputation!";
+
+                        let copyPredictionElement = document.createElement('button');
+                        copyPredictionElement.setAttribute('class', 'button-28');
+                        copyPredictionElement.setAttribute('id', 'prediction-commitment-📋');
+                        copyPredictionElement.setAttribute('value', predictionHash);
+                        copyPredictionElement.innerText = '📋';
+                        predictionElement.appendChild(copyPredictionElement);
+
+                        let saltElement = document.getElementById("salt");
+                        saltElement.innerText = "🧂: " + predictionSalt + '  ';
+                        saltElement.title = "Kind of like a password that helps you reveal your prediction commitment later."
+                        let copySaltElement = document.createElement('button');
+                        copySaltElement.setAttribute('class', 'button-28');
+                        copySaltElement.setAttribute('id', 'prediction-🧂-📋');
+                        copySaltElement.setAttribute('value', predictionSalt);
+                        copySaltElement.innerText = '📋';
+                        saltElement.appendChild(copySaltElement);
+
+                        savePrediction(prediction, predictionSalt, predictionCommitment);
+                        document.getElementById('save-prediction').innerText = "Prediction Saved 📑";
+                    });
+                })
+            }
+        }
+
+        function savePrediction(prediction, predictionSalt, predictionCommitment) {
+            const predictionLink = window.location.href + '&' + urlEncodedDoor + '=' + predictionCommitment + '&' +
+                urlEncodedSalt + '=' + predictionSalt + '&' + urlEncodedCheck + '=' + prediction;
+
+            localStorage.setItem(surveyRoot, predictionLink);
+            const storedLink = localStorage.getItem(surveyRoot);
+            console.log("Prediction Link: ", storedLink);
         }
 
         function setOptions(optionsArray) {
@@ -414,8 +312,12 @@
     </fieldset>
 
     <div>
-        <button class="button-28" onclick="generatePrediction()">Post Your Prediction!</button>
-        <p id="prediction"></p>
+        <button class="button-28" id="save-prediction" onclick="generatePrediction()"
+            title="Save your prediction to share later and post your commitment now.">Save Your Prediction 📝</button>
+        <div>
+            <p id="prediction"></p>
+        </div>
+        <p id="salt"></p>
     </div>
 
     <a href="https://twitter.com/zkporpoise?ref_src=twsrc%5Etfw" class="twitter-follow-button"

@@ -1,0 +1,50 @@
+body {
+    background-color: #000;
+    color: #0ff;
+    /* Light blue font color */
+    font-family: 'Courier New', monospace;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    padding: 50px;
+}
+
+h1 {
+    font-size: 3em;
+    margin: 10px;
+}
+
+p {
+    font-size: 1.2em;
+    margin: 20px;
+}
+
+/* visited link */
+a[href]:visited {
+    color: #00d0ff;
+}
+
+/* mouse over link */
+a[href]:hover {
+    color: #00ddff;
+}
+
+/* unvisited link */
+a[href] {
+    color: #0ff;
+    text-decoration: none;
+}
+
+footer {
+    padding: 20px;
+}
+
+header img {
+    width: 2.5em;
+    /* Set the width to match the font size */
+    height: 1em;
+    /* Set the height to match the font size */
+}
