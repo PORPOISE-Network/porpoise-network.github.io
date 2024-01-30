@@ -59,7 +59,7 @@
                     document.getElementById('🐬').innerHTML = "Missing ⏰ in URL.";
                     return 0;
                 } else {
-                    document.getElementById('⏰').innerHTML = '⏰ Deadline: ' + convertUTCtoDate(alarmclock);
+                    document.getElementById('⏰').innerHTML = '⏰: ' + convertUTCtoDate(alarmclock);
                     surveyLeafs.push(alarmclock);
                 }
 
@@ -69,9 +69,9 @@
                     return 0;
                 } else {
                     if (oracle === '0') {
-                        document.getElementById('🔮').innerHTML = '🔮 Oracle Address: No oracle for this survey.';
+                        document.getElementById('🔮').innerHTML = '🔮: No oracle for this survey.';
                     } else {
-                        document.getElementById('🔮').innerHTML = '🔮 Oracle Address: ' + oracle;
+                        document.getElementById('🔮').innerHTML = '🔮: ' + oracle;
                     }
                     surveyLeafs.push(oracle);
                 }
@@ -373,8 +373,8 @@
         data-show-count="false">Follow @zkporpoise</a>
     <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 
-    <p id="⏰"></p>
-    <p id="🔮"></p>
+    <p id="⏰" title="Survey prediction deadline."></p>
+    <p id="🔮" title="Event oracle contract address."></p>
 
     <footer>
         <p>
