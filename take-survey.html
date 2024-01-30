@@ -145,7 +145,7 @@
                     hashString(predictionSalt + predictionHash + surveyRoot).then((predictionCommitment) => {
 
                         let predictionElement = document.getElementById("prediction");
-                        predictionElement.innerHTML = "Commitment: " + predictionCommitment.slice(0, 10) + '...  ';
+                        predictionElement.innerHTML = "Commitment: " + predictionCommitment.slice(0, 5) + '...  ';
                         predictionElement.title = "Commits you to a specific prediction. Post it somewhere to build your reputation!";
 
                         let copyPredictionElement = document.createElement('button');
@@ -156,7 +156,7 @@
                         predictionElement.appendChild(copyPredictionElement);
 
                         let saltElement = document.getElementById("salt");
-                        saltElement.innerText = "🧂: " + predictionSalt + '  ';
+                        saltElement.innerText = "🧂: " + predictionSalt.slice(0, 5) + '...  ';
                         saltElement.title = "Kind of like a password that helps you reveal your prediction commitment later."
                         let copySaltElement = document.createElement('button');
                         copySaltElement.setAttribute('class', 'button-28');
