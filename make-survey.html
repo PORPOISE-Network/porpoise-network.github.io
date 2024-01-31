@@ -50,17 +50,49 @@
                 urlEncodedCrystalBall + '=' + oracle.replace(/\s+/g, '-');
 
             for (let i = 0; i < optionCounter; i++) {
-                let option = document.getElementById('🗳' + (i+1) + 'input').value;
+                let option = document.getElementById('🗳' + (i + 1) + 'input').value;
                 console.log("option: ", option);
-                surveyURL = surveyURL + '&' + urlEncodedBallotBox + (i+1) + '=' + option.replace(/\s+/g, '-')
+                surveyURL = surveyURL + '&' + urlEncodedBallotBox + (i + 1) + '=' + option.replace(/\s+/g, '-')
             }
             console.log("Survey URL:", surveyURL);
 
-            document.getElementById('surveyURL').innerHTML = surveyURL.slice(0, 50) + "...";
+            document.getElementById('surveyLink').innerHTML = surveyURL.slice(0, 45) + "...  ";
             document.getElementById('surveyLink').setAttribute('href', surveyURL);
             document.getElementById('note').innerHTML = "Share your new survey anywhere!";
 
+            let copySurveyElement = document.createElement('button');
+            copySurveyElement.setAttribute('class', 'button-28');
+            copySurveyElement.setAttribute('id', 'survey-link-📋');
+            copySurveyElement.setAttribute('value', surveyURL);
+            copySurveyElement.setAttribute('onclick', 'copySurveyLink()')
+            copySurveyElement.innerText = '📋';
+            document.getElementById('surveyURL').appendChild(copySurveyElement);
+
             return 1;
+        }
+
+        function copySurveyLink() {
+            // Get the button element
+            const button = document.getElementById('survey-link-📋');
+
+            // Create a temporary textarea
+            const textarea = document.createElement('textarea');
+            textarea.value = button.value; // Use textContent instead of value
+
+            // Append the textarea to the document
+            document.body.appendChild(textarea);
+
+            // Select the text in the textarea
+            textarea.select();
+            textarea.setSelectionRange(0, 99999); // For mobile devices
+
+            // Copy the selected text to the clipboard
+            document.execCommand('copy');
+
+            // Remove the temporary textarea
+            document.body.removeChild(textarea);
+
+            button.innerText = '✅';
         }
 
         function addAnotherOption() {
@@ -140,9 +172,7 @@
             Generate Survey Link
         </h2>
         <button class="button-28" onclick="generateLink()">🐬!</button>
-        <a id="surveyLink" target="_blank">
-            <p id="surveyURL"></p>
-        </a>
+        <p id="surveyURL"><a id="surveyLink" target="_blank"></a></p>
         <p id="note"></p>
     </div>
 
