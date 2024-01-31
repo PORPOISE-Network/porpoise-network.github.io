@@ -9,7 +9,8 @@ body {
 }
 
 header {
-    padding: 50px;
+    padding: 50px 50px 10px 50px;
+    ;
 }
 
 h1 {
@@ -47,4 +48,15 @@ header img {
     /* Set the width to match the font size */
     height: 1em;
     /* Set the height to match the font size */
+}
+
+.porpoise-links {
+    width: fit-content;
+    margin: 0 auto;
+    /* Center the container */
+    padding: 20px;
+}
+
+.porpoise-links p {
+    text-align: left;
 }
