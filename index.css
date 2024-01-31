@@ -9,7 +9,7 @@ body {
 }
 
 header {
-    padding: 50px 50px 10px 50px;
+    padding: 50px 5px 10px 5px;
     ;
 }
 
@@ -54,7 +54,7 @@ header img {
     width: fit-content;
     margin: 0 auto;
     /* Center the container */
-    padding: 20px;
+    padding: 10px;
 }
 
 .porpoise-links p {
