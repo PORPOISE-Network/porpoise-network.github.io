@@ -41,7 +41,7 @@
             console.log("Deadline: ", deadline);
 
             if (dolphin === '' || date === '' || time === '' || oracle === '' || option1 === '' || option2 === '') {
-                document.getElementById('surveyURL').innerHTML = "You must enter something in each field to generate a link."
+                document.getElementById('note').innerHTML = "You must enter something in each field to generate a link."
                 return 0;
             }
 
@@ -49,6 +49,7 @@
                 urlEncodedAlarmClock + '=' + deadline + '&' +
                 urlEncodedCrystalBall + '=' + oracle.replace(/\s+/g, '-');
 
+            console.log('Option Counter loop: ', optionCounter);
             for (let i = 0; i < optionCounter; i++) {
                 let option = document.getElementById('🗳' + (i + 1) + 'input').value;
                 console.log("option: ", option);
@@ -60,13 +61,17 @@
             document.getElementById('surveyLink').setAttribute('href', surveyURL);
             document.getElementById('note').innerHTML = "Share your new survey anywhere!";
 
-            let copySurveyElement = document.createElement('button');
-            copySurveyElement.setAttribute('class', 'button-28');
-            copySurveyElement.setAttribute('id', 'survey-link-📋');
-            copySurveyElement.setAttribute('value', surveyURL);
-            copySurveyElement.setAttribute('onclick', 'copySurveyLink()')
-            copySurveyElement.innerText = '📋';
-            document.getElementById('surveyURL').appendChild(copySurveyElement);
+            if (document.getElementById('surveyURL').lastChild.getAttribute('id') === 'survey-link-📋') {
+                return 1;
+            } else {
+                let copySurveyElement = document.createElement('button');
+                copySurveyElement.setAttribute('class', 'button-28');
+                copySurveyElement.setAttribute('id', 'survey-link-📋');
+                copySurveyElement.setAttribute('value', surveyURL);
+                copySurveyElement.setAttribute('onclick', 'copySurveyLink()');
+                copySurveyElement.innerText = '📋';
+                document.getElementById('surveyURL').appendChild(copySurveyElement);
+            }
 
             return 1;
         }
@@ -114,6 +119,19 @@
             console.log("Option Counter:", optionCounter);
         }
 
+        function removeLastOption() {
+
+            if (optionCounter <= 2) {
+                console.log("Must have at least 2 options.")
+                return 0;
+            } else {
+                console.log("Removing last option from list")
+                optionCounter = optionCounter - 1;
+                let optionsContainer = document.getElementById('🗳');
+                optionsContainer.removeChild(optionsContainer.lastChild);
+            }
+        }
+
         function localDateTimeToUTCTimestamp(dateString, timeString) {
             // Combine the date and time strings into a single string
             const combinedDateTimeString = `${dateString}T${timeString}:00`;
@@ -149,7 +167,11 @@
             🗳2: <input type="text" id="🗳2input" placeholder="Enter an outcome...">
         </p>
     </div>
-    <button class="button-28" id="add-option" onclick="addAnotherOption()">➕</button>
+
+    <div>
+        <button class="button-28" id="add-option" onclick="addAnotherOption()">➕</button>
+        <button class="button-28" id="remove-option" onclick="removeLastOption()">➖</button>
+    </div>
 
     <div id="⏰">
         <h2>Pick a deadline for predictions to be committed.</h2>
