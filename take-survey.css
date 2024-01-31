@@ -10,7 +10,7 @@ body {
 }
 
 header {
-    padding: 50px;
+    padding: 50px 5px 10px 5px;
     max-width: 100%;
 }
 
@@ -125,6 +125,10 @@ input[type="radio"]:checked {
 .button-28:active {
     box-shadow: none;
     transform: translateY(0);
+}
+
+.options p {
+    text-align: left;
 }
 
 footer {
