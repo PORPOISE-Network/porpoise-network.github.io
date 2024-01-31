@@ -20,7 +20,7 @@ h1 {
 }
 
 h2 {
-    font-size: 1.5em;
+    font-size: 1.25em;
     max-width: 100%;
 }
 
@@ -59,13 +59,6 @@ a[href] {
 
 footer {
     padding: 20px;
-}
-
-header img {
-    width: 2.5em;
-    /* Set the width to match the font size */
-    height: 1em;
-    /* Set the height to match the font size */
 }
 
 .porpoise-links {
