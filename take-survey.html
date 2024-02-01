@@ -17,11 +17,14 @@
         let surveyLeafs = [];
         let paddedSurveyLeafs;
         let surveyRoot;
+        let deadlineTimestamp; 
 
         const urlPrefix = 'https://porpoise.network/take-survey.html?';
         const urlEncodedDoor = '%F0%9F%9A%AA';
         const urlEncodedSalt = '%F0%9F%A7%82';
         const urlEncodedCheck = '%E2%9C%94';
+
+
 
         function getSurveyComponents() {
 
@@ -59,7 +62,8 @@
                     document.getElementById('🐬').innerHTML = "Missing ⏰ in URL.";
                     return 0;
                 } else {
-                    document.getElementById('⏰').innerHTML = '⏰: ' + convertUTCtoDate(alarmclock);
+                    deadlineTimestamp = alarmclock;
+                    updateCountdown();
                     surveyLeafs.push(alarmclock);
                 }
 
@@ -288,6 +292,27 @@
             return formattedDateTime;
         }
 
+        function updateCountdown() {
+            const currentTime = new Date().getTime();
+            const timeDifference = deadlineTimestamp - currentTime;
+
+            if (timeDifference > 0) {
+                const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
+
+                // Display the countdown in the element
+                document.getElementById('⏰').innerHTML = '⏰: ' + `${days}d ${hours}h ${minutes}m ${seconds}s`;
+
+                // Update every second
+                setTimeout(updateCountdown, 1000);
+            } else {
+                // Display a message when the countdown reaches zero
+                document.getElementById('⏰').innerHTML = '⏰: 💀 Time is up!';
+            }
+        }
+
         function generateRandomString(length) {
             const charset = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
             let randomString = '';
@@ -363,6 +388,7 @@
     <fieldset id="🗳" class="options">
         <legend>Make a Predcition:</legend>
     </fieldset>
+    <p id="⏰" title="Survey prediction deadline."></p>
 
     <div>
         <button class="button-28" id="save-prediction" onclick="generatePrediction()"
@@ -377,7 +403,6 @@
         data-show-count="false">Follow @zkporpoise</a>
     <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 
-    <p id="⏰" title="Survey prediction deadline."></p>
     <p id="🔮" title="Event oracle contract address."></p>
 
     <footer>
