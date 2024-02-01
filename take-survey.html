@@ -144,7 +144,7 @@
                     console.log("Prediction Salt: ", predictionSalt);
                     hashString(predictionSalt + predictionHash + surveyRoot).then((predictionCommitment) => {
 
-                        postString = `I just made a prediction with 🐬#PROPOISENetwork!: ${predictionCommitment}\n\nMake your own here:\n${window.location.href}`
+                        postString = `I just made a prediction with 🐬#PORPOISENetwork!: ${predictionCommitment}\n\nMake your own here:\n${window.location.href}`
 
                         let predictionElement = document.getElementById("prediction");
                         predictionElement.innerHTML = "Commitment: " + predictionCommitment.slice(0, 5) + '...  ';
