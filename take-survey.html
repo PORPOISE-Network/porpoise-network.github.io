@@ -157,7 +157,7 @@
                         predictionElement.appendChild(copyPredictionElement);
 
                         let saltElement = document.getElementById("salt");
-                        saltElement.innerText = "🧂: " + predictionSalt.slice(0, 13) + '...  ';
+                        saltElement.innerText = "🧂: " + predictionSalt;//.slice(0, 13) + '...  ';
                         saltElement.title = "Kind of like a password that helps you reveal your prediction commitment later."
                         let copySaltElement = document.createElement('button');
                         copySaltElement.setAttribute('class', 'button-28');
@@ -165,9 +165,10 @@
                         copySaltElement.setAttribute('value', predictionSalt);
                         copySaltElement.setAttribute('onclick', 'copySalt()')
                         copySaltElement.innerText = '📋';
-                        saltElement.appendChild(copySaltElement);
+                        //saltElement.appendChild(copySaltElement);
 
                         savePrediction(prediction, predictionSalt, predictionCommitment);
+                        document.getElementById('save-prediction').innerText = '✅';
                     });
                 })
             }
@@ -363,7 +364,7 @@
 
     <div>
         <button class="button-28" id="save-prediction" onclick="generatePrediction()"
-            title="Save your prediction to share later and post your commitment now.">Save Your Prediction 💾</button>
+            title="Save your prediction to share later and post your commitment now.">💾</button>
         <div>
             <p id="prediction"></p>
         </div>
