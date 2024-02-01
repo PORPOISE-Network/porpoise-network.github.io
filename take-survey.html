@@ -144,6 +144,8 @@
                     console.log("Prediction Salt: ", predictionSalt);
                     hashString(predictionSalt + predictionHash + surveyRoot).then((predictionCommitment) => {
 
+                        postString = `I just made a prediction with 🐬#PROPOISENetwork!: ${predictionCommitment}\n\nMake your own here:\n${window.location.href}`
+
                         let predictionElement = document.getElementById("prediction");
                         predictionElement.innerHTML = "Commitment: " + predictionCommitment.slice(0, 5) + '...  ';
                         predictionElement.title = "Commits you to a specific prediction. Post it somewhere to build your reputation!";
@@ -151,7 +153,7 @@
                         let copyPredictionElement = document.createElement('button');
                         copyPredictionElement.setAttribute('class', 'button-28');
                         copyPredictionElement.setAttribute('id', 'prediction-commitment-📋');
-                        copyPredictionElement.setAttribute('value', predictionHash);
+                        copyPredictionElement.setAttribute('value', postString);
                         copyPredictionElement.setAttribute('onclick', 'copyCommitment()')
                         copyPredictionElement.innerText = '📋';
                         predictionElement.appendChild(copyPredictionElement);
