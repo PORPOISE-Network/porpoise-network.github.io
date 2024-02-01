@@ -30,6 +30,11 @@ p {
     max-width: 100%;
 }
 
+.timer {
+    margin-top: 5px;
+    margin-bottom: 20px;
+}
+
 /* visited link */
 a[href]:visited {
     color: #00d0ff;
@@ -50,7 +55,7 @@ fieldset {
     border: 2px solid #0ff;
     border-radius: 15px;
     padding: 16px;
-    margin-bottom: 20px;
+    margin-bottom: 5px;
     width: max-content;
     max-width: 100%;
     align-items: center;
