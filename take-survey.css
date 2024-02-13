@@ -89,6 +89,51 @@ input[type="radio"]:checked {
     border-color: #0ff;
 }
 
+input[type="text"] {
+    padding: 8px;
+    font-size: 16px;
+    width: 200px;
+    max-width: 100%;
+    border: 1px solid #0ff;
+    border-radius: 4px;
+    box-sizing: border-box;
+    background-color: black;
+    color: #0ff;
+}
+
+#loginContainer {
+    display: none;
+    /* Initially hide the input container */
+    position: fixed;
+    /* Position the container relative to the viewport */
+    top: 50%;
+    /* Center vertically */
+    left: 50%;
+    /* Center horizontally */
+    transform: translate(-50%, -50%);
+    /* Center the container */
+    z-index: 9999;
+    /* Ensure it's on top of other content */
+    background-color: black;
+    padding: 30px 10px 30px 10px;
+    border: 2px solid #0ff;
+    border-radius: 6px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 100;
+}
+
+#textInput,
+#texInput:focus,
+#textInput:active {
+    width: 200px;
+    padding: 10px;
+    font-size: 16px;
+    background-color: rgb(31, 28, 28);
+    border: 2px solid #0ff;
+    color: #0ff;
+    border-radius: 6px;
+}
+
 .button-28 {
     appearance: none;
     background-color: transparent;
@@ -102,7 +147,7 @@ input[type="radio"]:checked {
     font-size: 16px;
     font-weight: 600;
     line-height: normal;
-    margin: 0;
+    margin: 5px;
     min-height: 20px;
     min-width: fit-content;
     outline: none;
