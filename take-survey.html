@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="/take-survey.css">
 
     <script>
+        // global variables for a given user's survey
         let prediction = "";
         let predictionSalt = 0;
         let surveyLeafs = [];
@@ -20,6 +21,7 @@
         let surveyRoot;
         let deadlineTimestamp;
         let keyID = "";
+        let surveyIsExpired = false;
 
         const urlPrefix = 'https://porpoise.network/take-survey.html?';
         const urlEncodedDoor = '%F0%9F%9A%AA';
@@ -145,6 +147,11 @@
 
         function generatePrediction() {
 
+            if (surveyIsExpired){
+                console.log("Survey is expired, changes can no longer be made.")
+                return 0;
+            }
+
             if (keyID === "") {
                 console.log("You must log in with a passkey first");
                 document.getElementById("loginContainer").style.display = "block";
@@ -166,38 +173,41 @@
 
                     // now create the prediction commitment by concatenating the salt, prediction hash, ans survey root
                     hashString(predictionSalt + predictionHash + surveyRoot).then((predictionCommitment) => {
-
-                        postString = `I just made a prediction with 🐬#PORPOISENetwork!: ${predictionCommitment}\n\nMake your own here:\n${window.location.href}`
-
-                        let predictionElement = document.getElementById("prediction");
-                        predictionElement.innerHTML = "Commitment: " + predictionCommitment.slice(0, 5) + '...  ';
-                        predictionElement.title = "Commits you to a specific prediction. Post it somewhere to build your reputation!";
-
-                        let copyPredictionElement = document.createElement('button');
-                        copyPredictionElement.setAttribute('class', 'button-28');
-                        copyPredictionElement.setAttribute('id', 'prediction-commitment-📋');
-                        copyPredictionElement.setAttribute('value', postString);
-                        copyPredictionElement.setAttribute('onclick', 'copyCommitment()')
-                        copyPredictionElement.innerText = '📋';
-                        predictionElement.appendChild(copyPredictionElement);
-
-                        let saltElement = document.getElementById("salt");
-                        saltElement.innerText = "🧂: " + predictionSalt;//.slice(0, 13) + '...  ';
-                        saltElement.title = "Kind of like a password that helps you reveal your prediction commitment later."
-                        let copySaltElement = document.createElement('button');
-                        copySaltElement.setAttribute('class', 'button-28');
-                        copySaltElement.setAttribute('id', 'prediction-🧂-📋');
-                        copySaltElement.setAttribute('value', predictionSalt);
-                        copySaltElement.setAttribute('onclick', 'copySalt()')
-                        copySaltElement.innerText = '📋';
-                        //saltElement.appendChild(copySaltElement);
-
+                        setPredictionHTMLElements(predictionCommitment);
                         savePrediction(prediction, predictionSalt, predictionCommitment);
-                        document.getElementById('save-prediction').innerText = '✅';
                         getPasskeySignature(predictionCommitment);
                     });
                 })
             }
+        }
+
+        function setPredictionHTMLElements(predictionCommitment) {
+            postString = `I just made a prediction with 🐬#PORPOISENetwork!: ${predictionCommitment}\n\nMake your own here:\n${window.location.href}`
+
+            let predictionElement = document.getElementById("prediction");
+            predictionElement.innerHTML = "Commitment: " + predictionCommitment.slice(0, 5) + '...  ';
+            predictionElement.title = "Commits you to a specific prediction. Post it somewhere to build your reputation!";
+
+            let copyPredictionElement = document.createElement('button');
+            copyPredictionElement.setAttribute('class', 'button-28');
+            copyPredictionElement.setAttribute('id', 'prediction-commitment-📋');
+            copyPredictionElement.setAttribute('value', postString);
+            copyPredictionElement.setAttribute('onclick', 'copyCommitment()')
+            copyPredictionElement.innerText = '📋';
+            predictionElement.appendChild(copyPredictionElement);
+
+            let saltElement = document.getElementById("salt");
+            saltElement.innerText = "🧂: " + predictionSalt;//.slice(0, 13) + '...  ';
+            saltElement.title = "Kind of like a password that helps you reveal your prediction commitment later."
+            let copySaltElement = document.createElement('button');
+            copySaltElement.setAttribute('class', 'button-28');
+            copySaltElement.setAttribute('id', 'prediction-🧂-📋');
+            copySaltElement.setAttribute('value', predictionSalt);
+            copySaltElement.setAttribute('onclick', 'copySalt()')
+            copySaltElement.innerText = '📋';
+            //saltElement.appendChild(copySaltElement);
+
+            document.getElementById('save-prediction').innerText = '✅';
         }
 
         function copyCommitment() {
@@ -267,7 +277,7 @@
                 predictionSalt = urlParams['🧂'];
                 console.log("Stored Prediction: ", prediction);
                 console.log("Stored Salt: ", predictionSalt);
-                return predictionLink;
+                return urlParams;
             } else {
                 return null;
             }
@@ -277,7 +287,7 @@
             let optionsContainer = document.getElementById('🗳')
 
             // if we've already made a prediction before, load the prediction and salt value
-            getSavedPrediction();
+            const urlParams = getSavedPrediction();
 
             for (let i = 0; i < optionsArray.length; i++) {
                 console.log("Option", i, ": ", optionsArray[i]);
@@ -293,7 +303,7 @@
 
                 if (prediction === optionsArray[i]) {
                     inputElement.setAttribute('checked', true);
-                    generatePrediction();
+                    setPredictionHTMLElements(urlParams['🚪']);
                 }
                 paragraphElement.appendChild(inputElement);
 
@@ -307,7 +317,7 @@
             radioButtons.forEach(button => {
                 button.addEventListener('change', () => {
                     // Check which radio button is selected
-                    if (button.checked) {
+                    if (button.checked && !surveyIsExpired) {
                         console.log('Selected option:', button.value);
                         prediction = button.value;
                     }
@@ -354,6 +364,7 @@
             } else {
                 // Display a message when the countdown reaches zero
                 document.getElementById('⏰').innerHTML = '⏰: 💀 Time is up!';
+                surveyIsExpired = true; 
             }
         }
 
