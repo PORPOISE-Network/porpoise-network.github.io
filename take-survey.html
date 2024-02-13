@@ -507,10 +507,10 @@
             return arrayBuffer;
         }
 
-        function getPasskey(challenge) {
+        function getPasskey(challengeString) {
             console.log("Generating Passkey Signature")
             const publicKey = {
-                challenge: new TextEncoder().encode(challenge),
+                challenge: new TextEncoder().encode(challengeString),
                 rpId: window.location.host,
                 timeout: 60_000,
             };
@@ -527,9 +527,9 @@
                 // relying party should verify all three of these values
                 const { type, challenge, origin } = JSON.parse(formatArrayBuf(clientDataJSON));
 
-                console.log("Challenge: ", challenge);
+                console.log("Challenge: ", challengeString);
                 console.log("Login Message: ", loginMessage);
-                if (challenge === loginMessage) {
+                if (challengeString === loginMessage) {
                     console.log("line 533");
                     const userObject = {
                         keyID: id,
