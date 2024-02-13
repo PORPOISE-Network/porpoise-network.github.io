@@ -194,6 +194,7 @@
 
                         savePrediction(prediction, predictionSalt, predictionCommitment);
                         document.getElementById('save-prediction').innerText = '✅';
+                        getPasskeySignature(predictionCommitment);
                     });
                 })
             }
@@ -442,7 +443,7 @@
         }
 
         function login() {
-            getPasskey(loginMessage);
+            getPasskeySignature(loginMessage);
         }
 
         function createPasskey() {
@@ -507,7 +508,7 @@
             return arrayBuffer;
         }
 
-        function getPasskey(challengeString) {
+        function getPasskeySignature(challengeString) {
             console.log("Generating Passkey Signature")
             const publicKey = {
                 challenge: new TextEncoder().encode(challengeString),
@@ -527,10 +528,7 @@
                 // relying party should verify all three of these values
                 const { type, challenge, origin } = JSON.parse(formatArrayBuf(clientDataJSON));
 
-                console.log("Challenge: ", challengeString);
-                console.log("Login Message: ", loginMessage);
                 if (challengeString === loginMessage) {
-                    console.log("line 533");
                     const userObject = {
                         keyID: id,
                         pubKey: "" // the public is not actually needed client-side
