@@ -496,7 +496,7 @@
                 return null;
             }
             // Convert Base64 string to Uint8Array
-            const uint8Array = new Uint8Array(atob(base64String).split('').map(char => char.charCodeAt(0)));
+            const uint8Array = new Uint8Array(atob(userObject.pubKey).split('').map(char => char.charCodeAt(0)));
             // Convert Uint8Array back to ArrayBuffer
             const arrayBuffer = uint8Array.buffer;
             keyID = userObject.keyID;
