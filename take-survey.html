@@ -26,7 +26,7 @@
         const urlEncodedSalt = '%F0%9F%A7%82';
         const urlEncodedCheck = '%E2%9C%94';
 
-
+        loginMessage = "Login to PORPOISE";
 
         // this function gets called once on page load
         function getSurveyComponents() {
@@ -441,6 +441,10 @@
             container.appendChild(button);
         }
 
+        function login() {
+            getPasskey(loginMessage);
+        }
+
         function createPasskey() {
             const publicKey = {
                 challenge: new TextEncoder().encode(crypto.randomUUID()),
@@ -486,7 +490,6 @@
                 keyID: id,
                 pubKey: base64String
             }
-            console.log("")
             localStorage.setItem("userObject", JSON.stringify(userObject));
         }
 
@@ -503,6 +506,37 @@
             keyID = userObject.keyID;
             return arrayBuffer;
         }
+
+        function getPasskey(challenge) {
+            console.log("Generating Passkey Signature")
+            const publicKey = {
+                challenge: new TextEncoder().encode(challenge),
+                rpId: window.location.host,
+                timeout: 60_000,
+            };
+
+            navigator.credentials.get({
+                publicKey,
+                mediation: 'optional',
+            }).then((pubKeyCredential) => {
+                const { id } = pubKeyCredential;
+                keyID = id;
+
+                const { authenticatorData, clientDataJSON, signature, userHandle } = pubKeyCredential.response;
+
+                // relying party should verify all three of these values
+                const { type, challenge, origin } = JSON.parse(formatArrayBuf(clientDataJSON));
+
+                if (challenge === loginMessage) {
+                    const userObject = {
+                        keyID: id,
+                        pubKey: "" // the public is not actually needed client-side
+                    }
+                    localStorage.setItem("userObject", JSON.stringify(userObject));
+                    location.reload();
+                }
+            })
+        }
     </script>
 </head>
 
@@ -516,7 +550,7 @@
     <div id="loginContainer">
         <p>You must login with a passkey first.</p>
         <button class="button-28" type="submit" onclick="createAccount()">Create Key</button>
-        <button class="button-28" type="submit" onclick="">Login</button>
+        <button class="button-28" type="submit" onclick="login()">Login</button>
     </div>
 
     <fieldset id="🗳" class="options">
