@@ -486,12 +486,13 @@
                 keyID: id,
                 pubKey: base64String
             }
-            localStorage.setItem("pubkey", userObject);
+            console.log("")
+            localStorage.setItem("userObject", JSON.stringify(userObject));
         }
 
         function retrievePublicKey() {
             // Retrieve the Base64 string from localStorage
-            const userObject = localStorage.getItem('pubkey');
+            const userObject = JSON.parse(localStorage.getItem('userObject'));
             if (!userObject) {
                 return null;
             }
