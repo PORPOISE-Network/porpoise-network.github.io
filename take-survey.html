@@ -527,7 +527,10 @@
                 // relying party should verify all three of these values
                 const { type, challenge, origin } = JSON.parse(formatArrayBuf(clientDataJSON));
 
+                console.log("Challenge: ", challenge);
+                console.log("Login Message: ", loginMessage);
                 if (challenge === loginMessage) {
+                    console.log("line 533");
                     const userObject = {
                         keyID: id,
                         pubKey: "" // the public is not actually needed client-side
