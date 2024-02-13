@@ -13,11 +13,12 @@
     <link rel="stylesheet" href="/take-survey.css">
 
     <script>
-        let prediction;
+        let prediction = "";
+        let predictionSalt = 0;
         let surveyLeafs = [];
         let paddedSurveyLeafs;
         let surveyRoot;
-        let deadlineTimestamp; 
+        let deadlineTimestamp;
 
         const urlPrefix = 'https://porpoise.network/take-survey.html?';
         const urlEncodedDoor = '%F0%9F%9A%AA';
@@ -26,6 +27,7 @@
 
 
 
+        // this function gets called once on page load
         function getSurveyComponents() {
 
             // Get the search parameters from the URL
@@ -97,11 +99,11 @@
                     document.getElementById('🐬').innerHTML = "A PORPOISE survey must have at least 2 options (🗳1 & 🗳2)."
                     return 0;
                 } else {
-                    setOptions(options);
                     paddedSurveyLeafs = padArrayToPowerOfTwo(surveyLeafs, '0');
                     computeMerkleRoot(paddedSurveyLeafs).then((root) => {
                         console.log("Merkle Root: ", root);
                         surveyRoot = root;
+                        setOptions(options);
                     })
                 }
             } else {
@@ -144,8 +146,12 @@
             } else {
                 hashString(prediction).then((predictionHash) => {
                     console.log("Prediction Hash: ", predictionHash);
-                    const predictionSalt = generateRandomString(18);
+
+                    // don't regenerate a salt value if we've already made on in the past
+                    predictionSalt = (predictionSalt === 0) ? generateRandomString(18) : predictionSalt;
                     console.log("Prediction Salt: ", predictionSalt);
+
+                    // now create the prediction commitment by concatenating the salt, prediction hash, ans survey root
                     hashString(predictionSalt + predictionHash + surveyRoot).then((predictionCommitment) => {
 
                         postString = `I just made a prediction with 🐬#PORPOISENetwork!: ${predictionCommitment}\n\nMake your own here:\n${window.location.href}`
@@ -237,8 +243,27 @@
             console.log("Prediction Link: ", storedLink);
         }
 
+        function getSavedPrediction() {
+
+            console.log("Checking for an existing saved prediction.")
+            const predictionLink = localStorage.getItem(surveyRoot);
+            if (predictionLink != null) {
+                const urlParams = parseQueryString(predictionLink.replace(window.location.origin + window.location.pathname + "?", ""));
+                prediction = urlParams['✔'];
+                predictionSalt = urlParams['🧂'];
+                console.log("Stored Prediction: ", prediction);
+                console.log("Stored Salt: ", predictionSalt);
+                return predictionLink;
+            } else {
+                return null;
+            }
+        }
+
         function setOptions(optionsArray) {
             let optionsContainer = document.getElementById('🗳')
+
+            // if we've already made a prediction before, load the prediction and salt value
+            getSavedPrediction();
 
             for (let i = 0; i < optionsArray.length; i++) {
                 console.log("Option", i, ": ", optionsArray[i]);
@@ -251,6 +276,11 @@
                 inputElement.setAttribute('class', 'radio-buttons')
                 inputElement.setAttribute('value', optionsArray[i]);
                 inputElement.setAttribute('id', '🗳' + (i + 1) + 'input');
+
+                if (prediction === optionsArray[i]) {
+                    inputElement.setAttribute('checked', true);
+                    generatePrediction();
+                }
                 paragraphElement.appendChild(inputElement);
 
 
@@ -386,7 +416,7 @@
     <h2 id="🐬"></h2>
 
     <fieldset id="🗳" class="options">
-        <legend>Make a Predcition:</legend>
+        <legend>Make a Prediction:</legend>
     </fieldset>
     <p id="⏰" title="Remaining time for making predictions." class="timer"></p>
 
