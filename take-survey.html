@@ -147,7 +147,7 @@
 
         function generatePrediction() {
 
-            if (surveyIsExpired){
+            if (surveyIsExpired) {
                 console.log("Survey is expired, changes can no longer be made.")
                 return 0;
             }
@@ -364,7 +364,7 @@
             } else {
                 // Display a message when the countdown reaches zero
                 document.getElementById('⏰').innerHTML = '⏰: 💀 Time is up!';
-                surveyIsExpired = true; 
+                surveyIsExpired = true;
             }
         }
 
@@ -481,8 +481,28 @@
                 const pubKey = pubKeyCredential.response.getPublicKey();
 
                 // save the public key so we can use it for signature verification later
-                storePublicKey(id, pubKey);
-            }).then(() => {
+                const base64EncodedPublicKey = storePublicKey(id, pubKey);
+                return fetch('https://zkporpoise.replit.app/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        "records": [
+                            {
+                                "fields": {
+                                    "KeyID": id,
+                                    "Username": document.getElementById("username-input").value,
+                                    "base64EncodedPublicKey": base64EncodedPublicKey
+                                }
+                            }
+                        ]
+                    })
+                })
+            }).then((response) => {
+                if (!response.ok) {
+                    throw new Error("Network response was not ok.")
+                }
                 // reload the page after creating and caching the passkey
                 location.reload();
             }).catch((err) => {
@@ -503,6 +523,7 @@
                 pubKey: base64String
             }
             localStorage.setItem("userObject", JSON.stringify(userObject));
+            return base64String;
         }
 
         function retrievePublicKey() {
