@@ -167,7 +167,7 @@
                 hashString(prediction).then((predictionHash) => {
                     console.log("Prediction Hash: ", predictionHash);
 
-                    // don't regenerate a salt value if we've already made on in the past
+                    // don't regenerate a salt value if we've already made on in the past for this surveyRoot
                     predictionSalt = (predictionSalt === 0) ? generateRandomString(18) : predictionSalt;
                     console.log("Prediction Salt: ", predictionSalt);
 
@@ -512,17 +512,21 @@
         }
 
         function storePublicKey(id, pubKeyArrayBuffer) {
-            // Convert ArrayBuffer to Uint8Array
-            const uint8Array = new Uint8Array(pubKeyArrayBuffer);
-            // Convert Uint8Array to Base64 string
-            const base64String = btoa(String.fromCharCode.apply(null, uint8Array));
-            // Store the Base64 string in localStorage
-
+            const base64String = arrayBufferToBase64String(pubKeyArrayBuffer);
             const userObject = {
                 keyID: id,
                 pubKey: base64String
             }
+            // Store the Base64 string in localStorage
             localStorage.setItem("userObject", JSON.stringify(userObject));
+            return base64String;
+        }
+
+        function arrayBufferToBase64String(myArrayBuffer) {
+            // Convert ArrayBuffer to Uint8Array
+            const uint8Array = new Uint8Array(myArrayBuffer);
+            // Convert Uint8Array to Base64 string
+            const base64String = btoa(String.fromCharCode.apply(null, uint8Array));
             return base64String;
         }
 
@@ -532,11 +536,16 @@
             if (!userObject) {
                 return null;
             }
+            const pubKeyArrayBuffer = base64StringToArrayBuffer(userObject.pubKey);
+            keyID = userObject.keyID;
+            return pubKeyArrayBuffer;
+        }
+
+        function base64StringToArrayBuffer(base64String) {
             // Convert Base64 string to Uint8Array
-            const uint8Array = new Uint8Array(atob(userObject.pubKey).split('').map(char => char.charCodeAt(0)));
+            const uint8Array = new Uint8Array(atob(base64String).split('').map(char => char.charCodeAt(0)));
             // Convert Uint8Array back to ArrayBuffer
             const arrayBuffer = uint8Array.buffer;
-            keyID = userObject.keyID;
             return arrayBuffer;
         }
 
@@ -561,13 +570,40 @@
                 const { type, challenge, origin } = JSON.parse(formatArrayBuf(clientDataJSON));
 
                 if (challengeString === loginMessage) {
+                    // if we're signing a login message, set the keyID in localStorage
                     const userObject = {
                         keyID: id,
                         pubKey: "" // the public is not actually needed client-side
                     }
                     localStorage.setItem("userObject", JSON.stringify(userObject));
                     location.reload();
+                } else {
+                    // otherwise we're making a prediction and we need to send the prediction off to be stored
+                    // remember, the challenge String is the SHA256 hash of the concatenation of the salt + predictionHash + surveyRoot
+                    return fetch('https://zkporpoise.replit.app/predict', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            "records": [
+                                {
+                                    "fields": {
+                                        "KeyID": keyID,
+                                        "SurveyRoot": surveyRoot,
+                                        "SurveySelection": prediction,
+                                        "SurveySalt": predictionSalt,
+                                        "base64EncodedAuthenticatorData": arrayBufferToBase64String(authenticatorData),
+                                        "base64EncodedClientDataJSON": arrayBufferToBase64String(clientDataJSON),
+                                        "base64EncodedSignature": arrayBufferToBase64String(signature)
+                                    }
+                                }
+                            ]
+                        })
+                    })
                 }
+            }).catch((err) => {
+                console.log("Prediction Submission Error: ", err);
             })
         }
 
