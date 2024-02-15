@@ -594,7 +594,7 @@
                 } else {
                     // otherwise we're making a prediction and we need to send the prediction off to be stored
                     // remember, the challenge String is the SHA256 hash of the concatenation of the salt + predictionHash + surveyRoot
-                    return fetch('https://zkporpoise.replit.app/predictAndVerify', {
+                    return fetch('https://zkporpoise.replit.app/predict', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
