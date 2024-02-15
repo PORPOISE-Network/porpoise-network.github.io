@@ -574,6 +574,20 @@
                     }
                     localStorage.setItem("userObject", JSON.stringify(userObject));
                     location.reload();
+                    return fetch('https://zkporpoise.replit.app/login', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            "keyID": keyID,
+                            "base64EncodedAuthenticatorData": arrayBufferToBase64String(authenticatorData),
+                            "base64EncodedClientDataJSON": arrayBufferToBase64String(clientDataJSON),
+                            "base64EncodedSignature": arrayBufferToBase64String(signature)
+                        })
+                    }).then((response) => {
+                        console.log("User Data: ", response.json());
+                    })
                 } else {
                     // otherwise we're making a prediction and we need to send the prediction off to be stored
                     // remember, the challenge String is the SHA256 hash of the concatenation of the salt + predictionHash + surveyRoot
