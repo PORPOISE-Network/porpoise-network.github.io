@@ -519,7 +519,7 @@
             }
             // Store the Base64 string in localStorage
             localStorage.setItem("userObject", JSON.stringify(userObject));
-            document.getElementById("username").innerText = document.getElementById("username").innerText.replace(/__/g, username);
+            document.getElementById("username").innerText = document.getElementById("username").innerText.replace(/__/g, username).slice(0,13);
             return base64String;
         }
 
@@ -540,7 +540,7 @@
             const pubKeyArrayBuffer = base64StringToArrayBuffer(userObject.pubKey);
             keyID = userObject.keyID;
             username = userObject.username;
-            document.getElementById("username").innerText = document.getElementById("username").innerText.replace(/__/g, username);
+            document.getElementById("username").innerText = document.getElementById("username").innerText.replace(/__/g, username).slice(0,13);;
             return pubKeyArrayBuffer;
         }
 
