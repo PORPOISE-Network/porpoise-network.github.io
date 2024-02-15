@@ -21,6 +21,7 @@
         let surveyRoot;
         let deadlineTimestamp;
         let keyID = "";
+        let username = "";
         let surveyIsExpired = false;
 
         const urlPrefix = 'https://porpoise.network/take-survey.html?';
@@ -458,6 +459,7 @@
         }
 
         function createPasskey() {
+            username = document.getElementById("username-input").value;
             const publicKey = {
                 challenge: new TextEncoder().encode(crypto.randomUUID()),
                 rp: {
@@ -467,13 +469,13 @@
                 timeout: 60_000,
                 user: {
                     id: new TextEncoder().encode(crypto.randomUUID()),
-                    name: document.getElementById("username-input").value,
-                    displayName: document.getElementById("username-input").value
+                    name: username,
+                    displayName: username
                 },
                 pubKeyCredParams: [{ type: "public-key", alg: -7 }] // -7 denotes ECDSA
             }
 
-            console.log("Creating Passkey with username: ", document.getElementById("username-input").value);
+            console.log("Creating Passkey with username: ", username);
             navigator.credentials.create({ publicKey }).then((pubKeyCredential) => {
                 const {
                     id // the key id a.k.a. kid
@@ -481,7 +483,7 @@
                 const pubKey = pubKeyCredential.response.getPublicKey();
 
                 // save the public key so we can use it for signature verification later
-                const base64EncodedPublicKey = storePublicKey(id, pubKey);
+                const base64EncodedPublicKey = storePublicKey(id, pubKey, username);
                 console.log("KeyID: ", id);
                 console.log("Username: ", document.getElementById("username-input").value);
                 console.log("pubkey: ", base64EncodedPublicKey);
@@ -492,7 +494,7 @@
                     },
                     body: JSON.stringify({
                         "keyID": id,
-                        "username": document.getElementById("username-input").value,
+                        "username": username,
                         "base64EncodedPublicKey": base64EncodedPublicKey
                     })
                 })
@@ -508,11 +510,12 @@
             })
         }
 
-        function storePublicKey(id, pubKeyArrayBuffer) {
+        function storePublicKey(id, pubKeyArrayBuffer, username) {
             const base64String = arrayBufferToBase64String(pubKeyArrayBuffer);
             const userObject = {
                 keyID: id,
-                pubKey: base64String
+                pubKey: base64String, 
+                username: username
             }
             // Store the Base64 string in localStorage
             localStorage.setItem("userObject", JSON.stringify(userObject));
@@ -535,6 +538,7 @@
             }
             const pubKeyArrayBuffer = base64StringToArrayBuffer(userObject.pubKey);
             keyID = userObject.keyID;
+            username = userObject.username;
             return pubKeyArrayBuffer;
         }
 
@@ -567,12 +571,7 @@
                 const { type, challenge, origin } = JSON.parse(formatArrayBuf(clientDataJSON));
 
                 if (challengeString === loginMessage) {
-                    // if we're signing a login message, set the keyID in localStorage
-                    const userObject = {
-                        keyID: id,
-                        pubKey: "" // the public is not actually needed client-side
-                    }
-                    localStorage.setItem("userObject", JSON.stringify(userObject));
+                    // if we're signing a login message, ask the server for the associated public key and username
                     return fetch('https://zkporpoise.replit.app/login', {
                         method: 'POST',
                         headers: {
@@ -585,7 +584,9 @@
                             "base64EncodedSignature": arrayBufferToBase64String(signature)
                         })
                     }).then((response) => {
-                        console.log("User Data: ", response.json());
+                        return response.json();
+                    }).then((userData) => {
+                        storePublicKey(userData.keyid, userData.pubKey, userData.username);
                     })
                 } else {
                     // otherwise we're making a prediction and we need to send the prediction off to be stored
