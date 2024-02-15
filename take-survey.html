@@ -586,19 +586,13 @@
                             'Content-Type': 'application/json'
                         },
                         body: JSON.stringify({
-                            "records": [
-                                {
-                                    "fields": {
-                                        "KeyID": keyID,
-                                        "SurveyRoot": surveyRoot,
-                                        "SurveySelection": prediction,
-                                        "SurveySalt": predictionSalt,
-                                        "base64EncodedAuthenticatorData": arrayBufferToBase64String(authenticatorData),
-                                        "base64EncodedClientDataJSON": arrayBufferToBase64String(clientDataJSON),
-                                        "base64EncodedSignature": arrayBufferToBase64String(signature)
-                                    }
-                                }
-                            ]
+                            "keyID": keyID,
+                            "surveyRoot": surveyRoot,
+                            "surveySelection": prediction,
+                            "surveySalt": predictionSalt,
+                            "base64EncodedAuthenticatorData": arrayBufferToBase64String(authenticatorData),
+                            "base64EncodedClientDataJSON": arrayBufferToBase64String(clientDataJSON),
+                            "base64EncodedSignature": arrayBufferToBase64String(signature)
                         })
                     })
                 }
