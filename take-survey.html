@@ -586,7 +586,8 @@
                     }).then((response) => {
                         return response.json();
                     }).then((userData) => {
-                        storePublicKey(userData.keyid, userData.pubKey, userData.username);
+                        storePublicKey(userData.keyid, userData.pubkey, userData.username);
+                        location.reload();
                     })
                 } else {
                     // otherwise we're making a prediction and we need to send the prediction off to be stored
