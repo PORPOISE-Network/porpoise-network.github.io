@@ -573,7 +573,6 @@
                         pubKey: "" // the public is not actually needed client-side
                     }
                     localStorage.setItem("userObject", JSON.stringify(userObject));
-                    location.reload();
                     return fetch('https://zkporpoise.replit.app/login', {
                         method: 'POST',
                         headers: {
