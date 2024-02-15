@@ -22,6 +22,7 @@
         let deadlineTimestamp;
         let keyID = "";
         let username = "";
+        let publicKeySting = "";
         let surveyIsExpired = false;
 
         const urlPrefix = 'https://porpoise.network/take-survey.html?';
@@ -537,11 +538,10 @@
             if (!userObject) {
                 return null;
             }
-            const pubKeyArrayBuffer = base64StringToArrayBuffer(userObject.pubKey);
+            publicKeySting = userObject.pubKey;
             keyID = userObject.keyID;
             username = userObject.username;
             document.getElementById("username").innerText = document.getElementById("username").innerText.replace(/__/g, username).slice(0,13);;
-            return pubKeyArrayBuffer;
         }
 
         function base64StringToArrayBuffer(base64String) {
@@ -594,7 +594,7 @@
                 } else {
                     // otherwise we're making a prediction and we need to send the prediction off to be stored
                     // remember, the challenge String is the SHA256 hash of the concatenation of the salt + predictionHash + surveyRoot
-                    return fetch('https://zkporpoise.replit.app/predict', {
+                    return fetch('https://zkporpoise.replit.app/predictAndVerify', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
@@ -606,7 +606,8 @@
                             "surveySalt": predictionSalt,
                             "base64EncodedAuthenticatorData": arrayBufferToBase64String(authenticatorData),
                             "base64EncodedClientDataJSON": arrayBufferToBase64String(clientDataJSON),
-                            "base64EncodedSignature": arrayBufferToBase64String(signature)
+                            "base64EncodedSignature": arrayBufferToBase64String(signature),
+                            "base64EncodedPublicKey": publicKeySting
                         })
                     })
                 }
