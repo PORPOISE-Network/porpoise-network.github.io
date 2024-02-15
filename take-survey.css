@@ -10,8 +10,15 @@ body {
 }
 
 header {
-    padding: 50px 5px 10px 5px;
+    display: flex;
+    justify-content: space-between;
+    font-family: 'Courier', monospace;
+    align-items: center;
+    padding: 5px 5px 5px 5px;
     max-width: 100%;
+    font-size: 1.5em;
+    border-bottom: 1px solid #0ff;
+    margin-bottom: 50px;
 }
 
 h1 {

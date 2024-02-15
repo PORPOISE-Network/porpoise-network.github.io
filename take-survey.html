@@ -519,6 +519,7 @@
             }
             // Store the Base64 string in localStorage
             localStorage.setItem("userObject", JSON.stringify(userObject));
+            document.getElementById("username").innerText(/__/g, username);
             return base64String;
         }
 
@@ -539,6 +540,7 @@
             const pubKeyArrayBuffer = base64StringToArrayBuffer(userObject.pubKey);
             keyID = userObject.keyID;
             username = userObject.username;
+            document.getElementById("username").innerText(/__/g, username);
             return pubKeyArrayBuffer;
         }
 
@@ -622,7 +624,8 @@
 
 <body onload="getSurveyComponents();">
     <header>
-        <h1><a href="/">PORPOISE</a> Survey:</h1>
+        <div id="username" title="Username">🥸:__</div>
+        <div id="menu" title="🐬 Home Menu"><a href="/">PORPOISE</a></div>
     </header>
 
     <h2 id="🐬"></h2>
