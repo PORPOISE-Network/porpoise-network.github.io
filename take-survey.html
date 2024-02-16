@@ -515,12 +515,12 @@
             const base64String = arrayBufferToBase64String(pubKeyArrayBuffer);
             const userObject = {
                 keyID: id,
-                pubKey: base64String, 
+                pubKey: base64String,
                 username: username
             }
             // Store the Base64 string in localStorage
             localStorage.setItem("userObject", JSON.stringify(userObject));
-            document.getElementById("username").innerText = document.getElementById("username").innerText.replace(/__/g, username).slice(0,13);
+            document.getElementById("username").innerText = document.getElementById("username").innerText.replace(/__/g, username).slice(0, 13);
             return base64String;
         }
 
@@ -541,7 +541,7 @@
             publicKeySting = userObject.pubKey;
             keyID = userObject.keyID;
             username = userObject.username;
-            document.getElementById("username").innerText = document.getElementById("username").innerText.replace(/__/g, username).slice(0,13);;
+            document.getElementById("username").innerText = document.getElementById("username").innerText.replace(/__/g, username).slice(0, 13);;
         }
 
         function base64StringToArrayBuffer(base64String) {
@@ -609,6 +609,12 @@
                             "base64EncodedSignature": arrayBufferToBase64String(signature),
                             "base64EncodedPublicKey": publicKeySting
                         })
+                    }).then((response) => {
+                        if (!response.ok) {
+                            throw new Error("Network response was not ok.")
+                        } else {
+                            console.log("Prediction accepted.")
+                        }
                     })
                 }
             }).catch((err) => {
