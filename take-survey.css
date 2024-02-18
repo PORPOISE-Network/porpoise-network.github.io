@@ -104,6 +104,7 @@ input[type="radio"]:checked {
 
 input[type="text"] {
     padding: 8px;
+    margin: 5px;
     font-size: 16px;
     width: 200px;
     max-width: 100%;
@@ -130,12 +131,12 @@ input[type="text"] {
     transform: translate(-50%, -50%);
     /* Ensure it's on top of other content */
     background-color: black;
-    padding: 30px 10px 30px 10px;
+    padding: 30px 2px 30px 2px;
     border: 2px solid #0ff;
     border-radius: 6px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     z-index: 100;
-    max-width: fit-content;
+    width: 300px;
 }
 
 #textInput,
@@ -143,6 +144,7 @@ input[type="text"] {
 #textInput:active {
     width: 200px;
     padding: 10px;
+    margin: 5px;
     font-size: 16px;
     background-color: rgb(31, 28, 28);
     border: 2px solid #0ff;
