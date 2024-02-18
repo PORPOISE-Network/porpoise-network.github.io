@@ -25,7 +25,7 @@
         let publicKeySting = "";
         let surveyIsExpired = false;
 
-        const urlPrefix = 'https://porpoise.network/';
+        const urlPrefix = 'https://zkporpoise.replit.app/predictAndVerify';
         const urlEncodedDolphin = '%F0%9F%90%AC';
         const urlEncodedAlarmClock = '%E2%8F%B0';
         const urlEncodedCrystalBall = '%F0%9F%94%AE';
@@ -620,9 +620,9 @@
                         location.reload();
                     })
                 } else {
-                    const predictionLink = urlPrefix + "/predictAndVerify" + window.location.search + '&' +
+                    const predictionLink = urlPrefix + window.location.search + '&' +
                         urlEncodedSalt + '=' + predictionSalt + '&' + urlEncodedCheck + '=' + prediction + '&' +
-                        urlEncodedFountainPen + '=' + arrayBufferToBase64String(signature) + '&' + urlEncodedDisguisedFace + '=' + username + '&' + 
+                        urlEncodedFountainPen + '=' + arrayBufferToBase64String(signature) + '&' + urlEncodedDisguisedFace + '=' + username + '&' +
                         urlEncodedPlunger + '=' + arrayBufferToBase64String(authenticatorData) + '&' +
                         urlEncodedToilet + '=' + arrayBufferToBase64String(clientDataJSON) + '&' +
                         urlEncodedToiletPaper + '=' + keyID;
