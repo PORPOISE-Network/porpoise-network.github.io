@@ -91,8 +91,23 @@
             textarea.select();
             textarea.setSelectionRange(0, 99999); // For mobile devices
 
-            // Copy the selected text to the clipboard
-            document.execCommand('copy');
+            if (navigator.share) {
+                navigator.share({
+                    title: "PORPOISE Survey",
+                    text: document.getElementById('🐬input').value,
+                    url: textarea.value // URL created by the survey
+                })
+                    .then(() => {
+                        console.log('Shared successfully');
+                    })
+                    .catch((error) => {
+                        console.error('Error sharing:', error);
+                    });
+            } else {
+                console.log("Native link sharing unavailable.")
+                // Copy the selected text to the clipboard
+                document.execCommand('copy');
+            }
 
             // Remove the temporary textarea
             document.body.removeChild(textarea);
