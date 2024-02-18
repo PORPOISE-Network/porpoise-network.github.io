@@ -227,8 +227,22 @@
             textarea.select();
             textarea.setSelectionRange(0, 99999); // For mobile devices
 
-            // Copy the selected text to the clipboard
-            document.execCommand('copy');
+            if (navigator.share) {
+                navigator.share({
+                    title: document.getElementById('🐬').innerText,
+                    text: button.value,
+                    url: window.location.href // URL of the shared item
+                })
+                    .then(() => {
+                        console.log('Shared successfully');
+                    })
+                    .catch((error) => {
+                        console.error('Error sharing:', error);
+                    });
+            } else {
+                // Copy the selected text to the clipboard
+                document.execCommand('copy');
+            }
 
             // Remove the temporary textarea
             document.body.removeChild(textarea);
