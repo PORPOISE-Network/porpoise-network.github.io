@@ -25,7 +25,7 @@
         let publicKeySting = "";
         let surveyIsExpired = false;
 
-        const urlPrefix = 'https://porpoise.network/take-survey.html?';
+        const urlPrefix = 'https://porpoise.network/';
         const urlEncodedDolphin = '%F0%9F%90%AC';
         const urlEncodedAlarmClock = '%E2%8F%B0';
         const urlEncodedCrystalBall = '%F0%9F%94%AE';
@@ -37,6 +37,7 @@
         const urlEncodedDisguisedFace = '%F0%9F%A5%B8';
         const urlEncodedPlunger = '%F0%9F%AA%A0';
         const urlEncodedToilet = '%F0%9F%9A%BD';
+        const urlEncodedToiletPaper = '%F0%9F%A7%BB';
 
         loginMessage = "Login to PORPOISE";
 
@@ -345,7 +346,6 @@
                         console.log('Selected option:', button.value);
                         prediction = button.value;
                     }
-                    console.log("asdfasdf: ", document.getElementById("save-prediction").style.display);
                     if (!document.getElementById("save-prediction").style.display) {
                         document.getElementById("save-prediction").style.display = "inline-block";
                     }
@@ -449,6 +449,8 @@
         }
 
         // Function to hash a string (use any suitable hash function)
+        // takes in a utf-8 string, then returns a hex string 🤷
+        // this is dumb but we'll unfuck it l8r
         function hashString(str) {
             const encoder = new TextEncoder();
             const data = encoder.encode(str);
@@ -618,6 +620,15 @@
                         location.reload();
                     })
                 } else {
+                    const predictionLink = urlPrefix + "/predictAndVerify" + window.location.search + '&' + urlEncodedDoor + '=' + predictionCommitment + '&' +
+                        urlEncodedSalt + '=' + predictionSalt + '&' + urlEncodedCheck + '=' + prediction + '&' +
+                        urlEncodedFountainPen + '=' + signature + '&' + urlEncodedDisguisedFace + '=' + username + '&' + 
+                        urlEncodedPlunger + '=' + arrayBufferToBase64String(authenticatorData) + '&' +
+                        urlEncodedToilet + '=' + arrayBufferToBase64String(clientDataJSON) + '&' +
+                        urlEncodedToiletPaper + '=' + keyID;
+
+                    console.log("Prediction Link:", predictionLink);
+
                     // otherwise we're making a prediction and we need to send the prediction off to be stored
                     // remember, the challenge String is the SHA256 hash of the concatenation of the salt + predictionHash + surveyRoot
                     return fetch('https://zkporpoise.replit.app/predictAndVerify', {
