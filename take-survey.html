@@ -323,6 +323,10 @@
                         console.log('Selected option:', button.value);
                         prediction = button.value;
                     }
+                    console.log("asdfasdf: ", document.getElementById("save-prediction").style.display);
+                    if (!document.getElementById("save-prediction").style.display) {
+                        document.getElementById("save-prediction").style.display = "inline-block";
+                    }
                 });
             });
         }

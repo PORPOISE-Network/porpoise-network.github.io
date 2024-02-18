@@ -39,7 +39,7 @@ p {
 }
 
 .survey-container {
-    top: 40%;
+    top: 30%;
     left: 50%;
     transform: translate(-50%, -50%);
     position: relative;
@@ -114,6 +114,10 @@ input[type="text"] {
     box-sizing: border-box;
     background-color: black;
     color: #0ff;
+}
+
+#save-prediction {
+    display: none;
 }
 
 #loginContainer {
