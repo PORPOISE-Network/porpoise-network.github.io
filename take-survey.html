@@ -84,9 +84,9 @@
                     return 0;
                 } else {
                     if (oracle === '0') {
-                        document.getElementById('🔮').innerHTML = '🔮: No oracle for this survey.';
+                        //document.getElementById('🔮').innerHTML = '🔮: No oracle for this survey.';
                     } else {
-                        document.getElementById('🔮').innerHTML = '🔮: ' + oracle.slice(0, 6) + '...' + oracle.slice(-6);
+                        //document.getElementById('🔮').innerHTML = '🔮: ' + oracle.slice(0, 6) + '...' + oracle.slice(-6);
                     }
                     surveyLeafs.push(oracle);
                 }
@@ -104,7 +104,7 @@
                 // if there are not at least two options, then the survey is not valid
                 if (options.length < 2) {
                     document.getElementById('⏰').innerHTML = '';
-                    document.getElementById('🔮').innerHTML = '';
+                    //document.getElementById('🔮').innerHTML = '';
                     document.getElementById('🐬').innerHTML = "A PORPOISE survey must have at least 2 options (🗳1 & 🗳2)."
                     return 0;
                 } else {
@@ -635,28 +635,28 @@
         <div id="menu" title="🐬 Home Menu"><a href="/">PORPOISE</a></div>
     </header>
 
-    <h2 id="🐬"></h2>
+    <div class="survey-container">
+        <h2 id="🐬"></h2>
 
-    <div id="loginContainer">
-        <p>You must login with a passkey first.</p>
-        <button class="button-28" type="submit" onclick="createAccount()">Create Key</button>
-        <button class="button-28" type="submit" onclick="login()">Login</button>
-    </div>
+        <div id="loginContainer">
+            <p>You must login with a passkey first.</p>
+            <button class="button-28" type="submit" onclick="createAccount()">Create Key</button>
+            <button class="button-28" type="submit" onclick="login()">Login</button>
+        </div>
 
-    <fieldset id="🗳" class="options">
-        <legend>Make a Prediction:</legend>
-    </fieldset>
-    <p id="⏰" title="Remaining time for making predictions." class="timer"></p>
+        <fieldset id="🗳" class="options">
+            <legend>Make a Prediction:</legend>
+        </fieldset>
+        <p id="⏰" title="Remaining time for making predictions." class="timer"></p>
 
-    <div>
-        <button class="button-28" id="save-prediction" onclick="generatePrediction()"
-            title="Save your prediction to share later and post your commitment now.">💾</button>
         <div>
-            <p id="prediction"></p>
+            <button class="button-28" id="save-prediction" onclick="generatePrediction()"
+                title="Save your prediction to share later and post your commitment now.">💾</button>
+            <div>
+                <p id="prediction"></p>
+            </div>
         </div>
     </div>
-
-    <p id="🔮" title="Event oracle contract address."></p>
 
     <footer>
         &copy; 2024 PORPOISE Network.

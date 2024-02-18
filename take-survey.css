@@ -7,6 +7,7 @@ body {
     margin: 0;
     padding: 0;
     font-family: "Courier New", Courier, monospace;
+    height: 100vh;
 }
 
 header {
@@ -35,6 +36,13 @@ p {
     font-size: 1.2em;
     margin: 20px;
     max-width: 100%;
+}
+
+.survey-container {
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    position: relative;
 }
 
 .timer {
@@ -118,8 +126,6 @@ input[type="text"] {
     left: 50%;
     /* Center horizontally */
     transform: translate(-50%, -50%);
-    /* Center the container */
-    z-index: 9999;
     /* Ensure it's on top of other content */
     background-color: black;
     padding: 30px 10px 30px 10px;
