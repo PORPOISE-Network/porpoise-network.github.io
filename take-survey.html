@@ -622,7 +622,7 @@
                 } else {
                     const predictionLink = urlPrefix + "/predictAndVerify" + window.location.search + '&' +
                         urlEncodedSalt + '=' + predictionSalt + '&' + urlEncodedCheck + '=' + prediction + '&' +
-                        urlEncodedFountainPen + '=' + signature + '&' + urlEncodedDisguisedFace + '=' + username + '&' + 
+                        urlEncodedFountainPen + '=' + arrayBufferToBase64String(signature) + '&' + urlEncodedDisguisedFace + '=' + username + '&' + 
                         urlEncodedPlunger + '=' + arrayBufferToBase64String(authenticatorData) + '&' +
                         urlEncodedToilet + '=' + arrayBufferToBase64String(clientDataJSON) + '&' +
                         urlEncodedToiletPaper + '=' + keyID;
