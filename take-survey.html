@@ -616,6 +616,8 @@
                         urlEncodedPlunger + '=' + arrayBufferToBase64UrlString(authenticatorData) + '&' +
                         urlEncodedToilet + '=' + arrayBufferToBase64UrlString(clientDataJSON) + '&' +
                         urlEncodedToiletPaper + '=' + keyID;
+
+                    console.log("Login Link: ", loginLink);
                     // if we're signing a login message, ask the server for the associated public key and username
                     return fetch('https://zkporpoise.replit.app/login', {
                         method: 'POST',
