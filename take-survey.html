@@ -512,10 +512,10 @@
                 const pubKey = pubKeyCredential.response.getPublicKey();
 
                 // save the public key so we can use it for signature verification later
-                const base64EncodedPublicKey = storePublicKey(id, pubKey, username);
+                const base64UrlEncodedPublicKey = storePublicKey(id, pubKey, username);
                 console.log("KeyID: ", id);
                 console.log("Username: ", document.getElementById("username-input").value);
-                console.log("pubkey: ", base64EncodedPublicKey);
+                console.log("pubkey: ", base64UrlEncodedPublicKey);
                 return fetch('https://zkporpoise.replit.app/register', {
                     method: 'POST',
                     headers: {
@@ -524,7 +524,7 @@
                     body: JSON.stringify({
                         "keyID": id,
                         "username": username,
-                        "base64EncodedPublicKey": base64EncodedPublicKey
+                        "base64EncodedPublicKey": base64UrlEncodedPublicKey
                     })
                 })
             }).then((response) => {
@@ -540,16 +540,16 @@
         }
 
         function storePublicKey(id, pubKeyArrayBuffer, username) {
-            const base64String = arrayBufferToBase64String(pubKeyArrayBuffer);
+            const base64UrlString = arrayBufferToBase64UrlString(pubKeyArrayBuffer);
             const userObject = {
                 keyID: id,
-                pubKey: base64String,
+                pubKey: base64UrlString,
                 username: username
             }
             // Store the Base64 string in localStorage
             localStorage.setItem("userObject", JSON.stringify(userObject));
             document.getElementById("username").innerText = document.getElementById("username").innerText.replace(/__/g, username).slice(0, 13);
-            return base64String;
+            return base64UrlString;
         }
 
         function arrayBufferToBase64String(myArrayBuffer) {
@@ -633,7 +633,7 @@
                     }).then((response) => {
                         return response.json();
                     }).then((userData) => {
-                        storePublicKey(userData.keyid, base64StringToArrayBuffer(userData.pubkey), userData.username);
+                        storePublicKey(userData.keyid, base64UrlStringToArrayBuffer(userData.base64urlencodedpublickey), userData.username);
                         location.reload();
                     })
                 } else {
@@ -655,22 +655,6 @@
                             console.log("Prediction accepted.")
                         }
                     });
-                    /*return fetch('https://zkporpoise.replit.app/predictAndVerify', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            "keyID": keyID,
-                            "surveyRoot": surveyRoot,
-                            "surveySelection": prediction,
-                            "surveySalt": predictionSalt,
-                            "base64EncodedAuthenticatorData": arrayBufferToBase64String(authenticatorData),
-                            "base64EncodedClientDataJSON": arrayBufferToBase64String(clientDataJSON),
-                            "base64EncodedSignature": arrayBufferToBase64String(signature),
-                            "base64EncodedPublicKey": publicKeySting
-                        })
-                    })*/
 
                 }
             }).catch((err) => {
