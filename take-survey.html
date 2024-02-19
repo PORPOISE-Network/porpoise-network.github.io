@@ -594,7 +594,7 @@
         }
 
         function base64UrlStringToArrayBuffer(base64UrlString) {
-            base64String = base64UrlString.replace(/-/g, '+').replace(/_/g, '/') + '==='.slice((base64Url.length + 3) % 4);
+            base64String = base64UrlString.replace(/-/g, '+').replace(/_/g, '/') + '==='.slice((base64UrlString.length + 3) % 4);
             return base64StringToArrayBuffer(base64String);
         }
 
