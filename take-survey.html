@@ -612,7 +612,7 @@
 
                 if (challengeString === loginMessage) {
                     const loginLink = urlPrefix + '/login' + '&' +
-                        urlEncodedFountainPen + '=' + arrayBufferToBase64UrlString(signature) + '&' + 
+                        urlEncodedFountainPen + '=' + arrayBufferToBase64UrlString(signature) + '&' +
                         urlEncodedPlunger + '=' + arrayBufferToBase64UrlString(authenticatorData) + '&' +
                         urlEncodedToilet + '=' + arrayBufferToBase64UrlString(clientDataJSON) + '&' +
                         urlEncodedToiletPaper + '=' + keyID;
@@ -648,7 +648,13 @@
 
                     // otherwise we're making a prediction and we need to send the prediction off to be stored
                     // remember, the challenge String is the SHA256 hash of the concatenation of the salt + predictionHash + surveyRoot
-                    return fetch(predictionLink);
+                    return fetch(predictionLink).then((response) => {
+                        if (!response.ok) {
+                            throw new Error("Network response was not ok.")
+                        } else {
+                            console.log("Prediction accepted.")
+                        }
+                    });
                     /*return fetch('https://zkporpoise.replit.app/predictAndVerify', {
                         method: 'POST',
                         headers: {
@@ -663,14 +669,9 @@
                             "base64EncodedClientDataJSON": arrayBufferToBase64String(clientDataJSON),
                             "base64EncodedSignature": arrayBufferToBase64String(signature),
                             "base64EncodedPublicKey": publicKeySting
-                        })*/
-                    }).then((response) => {
-                        if (!response.ok) {
-                            throw new Error("Network response was not ok.")
-                        } else {
-                            console.log("Prediction accepted.")
-                        }
-                    })
+                        })
+                    })*/
+
                 }
             }).catch((err) => {
                 console.log("Prediction Submission Error: ", err);
