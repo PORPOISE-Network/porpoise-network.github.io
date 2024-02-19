@@ -32,7 +32,7 @@
         const urlEncodedBallotBox = '%F0%9F%97%B3';
         const urlEncodedDoor = '%F0%9F%9A%AA';
         const urlEncodedSalt = '%F0%9F%A7%82';
-        const urlEncodedCheck = '%E2%9C%94';
+        const urlEncodedCheck = '%E2%9C%85';
         const urlEncodedFountainPen = '%F0%9F%96%8B';
         const urlEncodedDisguisedFace = '%F0%9F%A5%B8';
         const urlEncodedPlunger = '%F0%9F%AA%A0';
@@ -560,6 +560,11 @@
             return base64String;
         }
 
+        function arrayBufferToBase64UrlString(myArrayBuffer) {
+            const base64String = arrayBufferToBase64String(myArrayBuffer);
+            return base64String.replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
+        }
+
         function retrievePublicKey() {
             // Retrieve the Base64 string from localStorage
             const userObject = JSON.parse(localStorage.getItem('userObject'));
@@ -578,6 +583,11 @@
             // Convert Uint8Array back to ArrayBuffer
             const arrayBuffer = uint8Array.buffer;
             return arrayBuffer;
+        }
+
+        function base64UrlStringToArrayBuffer(base64UrlString) {
+            base64String = base64UrlString.replace(/-/g, '+').replace(/_/g, '/') + '==='.slice((base64Url.length + 3) % 4);
+            return base64StringToArrayBuffer(base64String);
         }
 
         function getPasskeySignature(challengeString) {
@@ -622,9 +632,9 @@
                 } else {
                     const predictionLink = urlPrefix + window.location.search + '&' +
                         urlEncodedSalt + '=' + predictionSalt + '&' + urlEncodedCheck + '=' + prediction + '&' +
-                        urlEncodedFountainPen + '=' + arrayBufferToBase64String(signature) + '&' + urlEncodedDisguisedFace + '=' + username + '&' +
-                        urlEncodedPlunger + '=' + arrayBufferToBase64String(authenticatorData) + '&' +
-                        urlEncodedToilet + '=' + arrayBufferToBase64String(clientDataJSON) + '&' +
+                        urlEncodedFountainPen + '=' + arrayBufferToBase64UrlString(signature) + '&' + urlEncodedDisguisedFace + '=' + username + '&' +
+                        urlEncodedPlunger + '=' + arrayBufferToBase64UrlString(authenticatorData) + '&' +
+                        urlEncodedToilet + '=' + arrayBufferToBase64UrlString(clientDataJSON) + '&' +
                         urlEncodedToiletPaper + '=' + keyID;
 
                     console.log("Prediction Link:", predictionLink);
