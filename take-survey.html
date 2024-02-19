@@ -648,7 +648,8 @@
 
                     // otherwise we're making a prediction and we need to send the prediction off to be stored
                     // remember, the challenge String is the SHA256 hash of the concatenation of the salt + predictionHash + surveyRoot
-                    return fetch('https://zkporpoise.replit.app/predictAndVerify', {
+                    return fetch(predictionLink);
+                    /*return fetch('https://zkporpoise.replit.app/predictAndVerify', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
@@ -662,7 +663,7 @@
                             "base64EncodedClientDataJSON": arrayBufferToBase64String(clientDataJSON),
                             "base64EncodedSignature": arrayBufferToBase64String(signature),
                             "base64EncodedPublicKey": publicKeySting
-                        })
+                        })*/
                     }).then((response) => {
                         if (!response.ok) {
                             throw new Error("Network response was not ok.")
