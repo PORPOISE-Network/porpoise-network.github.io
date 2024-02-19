@@ -512,16 +512,13 @@
                 } = pubKeyCredential;
                 const pubKey = pubKeyCredential.response.getPublicKey();
 
-                const registerLink = urlPrefix + '/register' + '&' +
+                const registerLink = urlPrefix + '/register' + '?' +
                     urlEncodedDisguisedFace + '=' + username + '&' +
                     urlEncodedKey + '=' + arrayBufferToBase64UrlString(pubKey) + '&' +
                     urlEncodedToiletPaper + '=' + id;
 
                 // save the public key so we can use it for signature verification later
                 const base64UrlEncodedPublicKey = storePublicKey(id, pubKey, username);
-                console.log("KeyID: ", id);
-                console.log("Username: ", document.getElementById("username-input").value);
-                console.log("pubkey: ", base64UrlEncodedPublicKey);
                 return fetch(registerLink).then((response) => {
                     if (!response.ok) {
                         throw new Error("Network response was not ok.")
