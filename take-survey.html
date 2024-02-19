@@ -626,7 +626,7 @@
                         urlEncodedToiletPaper + '=' + keyID;
 
                     console.log("Login Link: ", loginLink);
-                    return fetch(loginLin).then((response) => {
+                    return fetch(loginLink).then((response) => {
                         return response.json();
                     }).then((userData) => {
                         storePublicKey(userData.keyid, base64UrlStringToArrayBuffer(userData.base64urlencodedpublickey), userData.username);
