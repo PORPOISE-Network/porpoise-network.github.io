@@ -38,6 +38,7 @@
         const urlEncodedPlunger = '%F0%9F%AA%A0';
         const urlEncodedToilet = '%F0%9F%9A%BD';
         const urlEncodedToiletPaper = '%F0%9F%A7%BB';
+        const urlEncodedKey = '%F0%9F%94%91';
 
         loginMessage = "Login to PORPOISE";
 
@@ -511,12 +512,28 @@
                 } = pubKeyCredential;
                 const pubKey = pubKeyCredential.response.getPublicKey();
 
+                const registerLink = urlPrefix + '/register' + '&' +
+                    urlEncodedDisguisedFace + '=' + username + '&' +
+                    urlEncodedKey + '=' + arrayBufferToBase64UrlString(pubKey) + '&' +
+                    urlEncodedToiletPaper + '=' + id;
+
                 // save the public key so we can use it for signature verification later
                 const base64UrlEncodedPublicKey = storePublicKey(id, pubKey, username);
                 console.log("KeyID: ", id);
                 console.log("Username: ", document.getElementById("username-input").value);
                 console.log("pubkey: ", base64UrlEncodedPublicKey);
-                return fetch('https://zkporpoise.replit.app/register', {
+                return fetch(registerLink).then((response) => {
+                    if (!response.ok) {
+                        throw new Error("Network response was not ok.")
+                    } else {
+                        // reload the page after creating and caching the passkey
+                        location.reload();
+                    }
+                }).catch((err) => {
+                    // TODO: put some logic here to surface the error
+                    console.log("ERROR Registering Passkey: ", err);
+                });
+                /*return fetch('https://zkporpoise.replit.app/register', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -526,16 +543,7 @@
                         "username": username,
                         "base64EncodedPublicKey": base64UrlEncodedPublicKey
                     })
-                })
-            }).then((response) => {
-                if (!response.ok) {
-                    throw new Error("Network response was not ok.")
-                }
-                // reload the page after creating and caching the passkey
-                location.reload();
-            }).catch((err) => {
-                // TODO: put some logic here to surface the error
-                console.log("ERROR Registering Passkey: ", err);
+                })*/
             })
         }
 
@@ -611,15 +619,21 @@
                 const { type, challenge, origin } = JSON.parse(formatArrayBuf(clientDataJSON));
 
                 if (challengeString === loginMessage) {
-                    const loginLink = urlPrefix + '/login' + '&' +
+                    const loginLink = urlPrefix + '/login' + '?' +
                         urlEncodedFountainPen + '=' + arrayBufferToBase64UrlString(signature) + '&' +
                         urlEncodedPlunger + '=' + arrayBufferToBase64UrlString(authenticatorData) + '&' +
                         urlEncodedToilet + '=' + arrayBufferToBase64UrlString(clientDataJSON) + '&' +
                         urlEncodedToiletPaper + '=' + keyID;
 
                     console.log("Login Link: ", loginLink);
+                    return fetch(loginLin).then((response) => {
+                        return response.json();
+                    }).then((userData) => {
+                        storePublicKey(userData.keyid, base64UrlStringToArrayBuffer(userData.base64urlencodedpublickey), userData.username);
+                        location.reload();
+                    })
                     // if we're signing a login message, ask the server for the associated public key and username
-                    return fetch('https://zkporpoise.replit.app/login', {
+                    /*return fetch('https://zkporpoise.replit.app/login', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
@@ -630,12 +644,7 @@
                             "base64EncodedClientDataJSON": arrayBufferToBase64String(clientDataJSON),
                             "base64EncodedSignature": arrayBufferToBase64String(signature)
                         })
-                    }).then((response) => {
-                        return response.json();
-                    }).then((userData) => {
-                        storePublicKey(userData.keyid, base64UrlStringToArrayBuffer(userData.base64urlencodedpublickey), userData.username);
-                        location.reload();
-                    })
+                    })*/
                 } else {
                     const predictionLink = urlPrefix + '/predictAndVerify' + window.location.search + '&' +
                         urlEncodedSalt + '=' + predictionSalt + '&' + urlEncodedCheck + '=' + prediction + '&' +
