@@ -25,7 +25,7 @@
         let publicKeySting = "";
         let surveyIsExpired = false;
 
-        const urlPrefix = 'https://zkporpoise.replit.app/predictAndVerify';
+        const urlPrefix = 'https://zkporpoise.replit.app';
         const urlEncodedDolphin = '%F0%9F%90%AC';
         const urlEncodedAlarmClock = '%E2%8F%B0';
         const urlEncodedCrystalBall = '%F0%9F%94%AE';
@@ -611,6 +611,11 @@
                 const { type, challenge, origin } = JSON.parse(formatArrayBuf(clientDataJSON));
 
                 if (challengeString === loginMessage) {
+                    const loginLink = urlPrefix + '/login' + '&' +
+                        urlEncodedFountainPen + '=' + arrayBufferToBase64UrlString(signature) + '&' + 
+                        urlEncodedPlunger + '=' + arrayBufferToBase64UrlString(authenticatorData) + '&' +
+                        urlEncodedToilet + '=' + arrayBufferToBase64UrlString(clientDataJSON) + '&' +
+                        urlEncodedToiletPaper + '=' + keyID;
                     // if we're signing a login message, ask the server for the associated public key and username
                     return fetch('https://zkporpoise.replit.app/login', {
                         method: 'POST',
@@ -630,7 +635,7 @@
                         location.reload();
                     })
                 } else {
-                    const predictionLink = urlPrefix + window.location.search + '&' +
+                    const predictionLink = urlPrefix + '/predictAndVerify' + window.location.search + '&' +
                         urlEncodedSalt + '=' + predictionSalt + '&' + urlEncodedCheck + '=' + prediction + '&' +
                         urlEncodedFountainPen + '=' + arrayBufferToBase64UrlString(signature) + '&' + urlEncodedDisguisedFace + '=' + username + '&' +
                         urlEncodedPlunger + '=' + arrayBufferToBase64UrlString(authenticatorData) + '&' +
