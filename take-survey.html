@@ -187,16 +187,16 @@
                 predictionCommitment(predictionSalt, prediction, stringToBuffer(surveyRoot, 'hex')).then((commitment) => {
                     setPredictionHTMLElements(commitment);
                     savePrediction(prediction, predictionSalt, commitment);
-                    getPasskeySignature(predictionCommitment);
+                    getPasskeySignature(commitment);
                 })
             }
         }
 
-        function setPredictionHTMLElements(predictionCommitment) {
-            postString = `I just made a prediction with 🐬#PORPOISENetwork!: ${predictionCommitment}\n\nMake your own prediction here:\n${window.location.href}`
+        function setPredictionHTMLElements(commitment) {
+            postString = `I just made a prediction with 🐬#PORPOISENetwork!: ${commitment}\n\nMake your own prediction here:\n${window.location.href}`
 
             let predictionElement = document.getElementById("prediction");
-            predictionElement.innerHTML = "Share with friends! "; // + predictionCommitment.slice(0, 5) + '...  ';
+            predictionElement.innerHTML = "Share with friends! "; // + commitment.slice(0, 5) + '...  ';
             predictionElement.title = "Post your prediction commitment somewhere public to build your reputation!";
 
             let copyPredictionElement = document.createElement('button');
@@ -283,8 +283,8 @@
             button.innerText = '✅';
         }
 
-        function savePrediction(prediction, predictionSalt, predictionCommitment) {
-            const predictionLink = window.location.href + '&' + urlEncodedDoor + '=' + predictionCommitment + '&' +
+        function savePrediction(prediction, predictionSalt, commitment) {
+            const predictionLink = window.location.href + '&' + urlEncodedDoor + '=' + commitment + '&' +
                 urlEncodedSalt + '=' + predictionSalt + '&' + urlEncodedCheck + '=' + prediction;
 
             localStorage.setItem(surveyRoot, predictionLink);
