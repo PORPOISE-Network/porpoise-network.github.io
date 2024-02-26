@@ -128,7 +128,6 @@
                         .then((merkle) => {
                             surveyRoot = arrayBufferToHex(merkle[0]);
                             console.log("Merkle Root: ", surveyRoot);
-                            surveyRoot = merkle[0]; 
                             setOptions(options);
                         });
                 }
