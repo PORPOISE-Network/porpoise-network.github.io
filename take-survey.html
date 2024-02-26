@@ -12,6 +12,8 @@
 
     <link rel="stylesheet" href="/take-survey.css">
 
+    <script src="./utilities.js"></script>
+
     <script>
         // global variables for a given user's survey
         let prediction = "";
@@ -85,7 +87,7 @@
                 } else {
                     deadlineTimestamp = alarmclock;
                     updateCountdown();
-                    surveyLeafs.push(alarmclock);
+                    surveyLeafs.push(mapBigIntTo256BitNumber(BigInt(alarmclock)));
                 }
 
                 if (oracle === null) {
@@ -118,12 +120,17 @@
                     document.getElementById('🐬').innerHTML = "A PORPOISE survey must have at least 2 options (🗳1 & 🗳2)."
                     return 0;
                 } else {
-                    paddedSurveyLeafs = padArrayToPowerOfTwo(surveyLeafs, '0');
-                    computeMerkleRoot(paddedSurveyLeafs).then((root) => {
-                        console.log("Merkle Root: ", root);
-                        surveyRoot = root;
-                        setOptions(options);
+                    padArrayToPowerOfTwo(surveyLeafs, '0').then((leafs) => {
+                        console.log("Number of leafs: ", leafs.length);
+                        paddedSurveyLeafs = leafs;
+                        return computeMerkleRoot(leafs, [], 1);
                     })
+                        .then((merkle) => {
+                            surveyRoot = arrayBufferToHex(merkle[0]);
+                            console.log("Merkle Root: ", surveyRoot);
+                            surveyRoot = merkle[0]; 
+                            setOptions(options);
+                        });
                 }
             } else {
 
@@ -175,20 +182,12 @@
                 document.getElementById("inputContainer").style.display = "block";
                 return 0;
             } else {
-                // hash the prediction
-                hashString(prediction).then((predictionHash) => {
-                    console.log("Prediction Hash: ", predictionHash);
-
-                    // don't regenerate a salt value if we've already made on in the past for this surveyRoot
-                    predictionSalt = (predictionSalt === 0) ? generateRandomString(18) : predictionSalt;
-                    console.log("Prediction Salt: ", predictionSalt);
-
-                    // now create the prediction commitment by concatenating the salt, prediction hash, ans survey root
-                    hashString(predictionSalt + predictionHash + surveyRoot).then((predictionCommitment) => {
-                        setPredictionHTMLElements(predictionCommitment);
-                        savePrediction(prediction, predictionSalt, predictionCommitment);
-                        getPasskeySignature(predictionCommitment);
-                    });
+                predictionSalt = (predictionSalt === 0) ? generateRandomString(18) : predictionSalt;
+                console.log("Prediction Salt: ", predictionSalt);
+                predictionCommitment(predictionSalt, prediction, stringToBuffer(surveyRoot, 'hex')).then((commitment) => {
+                    setPredictionHTMLElements(commitment);
+                    savePrediction(prediction, predictionSalt, commitment);
+                    getPasskeySignature(predictionCommitment);
                 })
             }
         }
@@ -409,59 +408,6 @@
             return randomString;
         }
 
-        function padArrayToPowerOfTwo(arr, paddingValue) {
-            // Check if the array length is already a power of 2
-            if ((arr.length & (arr.length - 1)) === 0) {
-                return arr; // Array length is already a power of 2, no padding needed
-            }
-
-            // Calculate the next power of 2 greater than the current length
-            const nextPowerOfTwo = Math.pow(2, Math.ceil(Math.log2(arr.length)));
-
-            // Calculate the number of elements to pad
-            const paddingCount = nextPowerOfTwo - arr.length;
-
-            // Pad the array with the specified paddingValue (default is undefined)
-            return arr.concat(new Array(paddingCount).fill(paddingValue));
-        }
-
-        // Function to compute the Merkle root hash from an array of strings
-        async function computeMerkleRoot(strings) {
-            if (strings.length === 0) {
-                return null;
-            }
-
-            // Base case: if there's only one element, return its hash
-            if (strings.length === 1) {
-                return await hashString(strings[0]);
-            }
-
-            // Recursive case: compute hash of pairs until a single hash is obtained
-            const pairedHashes = [];
-            for (let i = 0; i < strings.length; i += 2) {
-                const left = strings[i];
-                const right = (i + 1 < strings.length) ? strings[i + 1] : '';
-                const pairHash = await hashString(left + right);
-                pairedHashes.push(pairHash);
-            }
-
-            // Recursively compute the Merkle root for the paired hashes
-            return await computeMerkleRoot(pairedHashes);
-        }
-
-        // Function to hash a string (use any suitable hash function)
-        // takes in a utf-8 string, then returns a hex string 🤷
-        // this is dumb but we'll unfuck it l8r
-        function hashString(str) {
-            const encoder = new TextEncoder();
-            const data = encoder.encode(str);
-
-            return crypto.subtle.digest('SHA-256', data).then(hashBuffer => {
-                const hashArray = Array.from(new Uint8Array(hashBuffer));
-                return hashArray.map(byte => byte.toString(16).padStart(2, '0')).join('');
-            });
-        }
-
         function createAccount() {
             // first clear out the other button options
             const container = document.getElementById("loginContainer");
@@ -530,17 +476,6 @@
                     // TODO: put some logic here to surface the error
                     console.log("ERROR Registering Passkey: ", err);
                 });
-                /*return fetch('https://zkporpoise.replit.app/register', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        "keyID": id,
-                        "username": username,
-                        "base64EncodedPublicKey": base64UrlEncodedPublicKey
-                    })
-                })*/
             })
         }
 
@@ -629,19 +564,6 @@
                         storePublicKey(userData.keyid, base64UrlStringToArrayBuffer(userData.base64urlencodedpublickey), userData.username);
                         location.reload();
                     })
-                    // if we're signing a login message, ask the server for the associated public key and username
-                    /*return fetch('https://zkporpoise.replit.app/login', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            "keyID": keyID,
-                            "base64EncodedAuthenticatorData": arrayBufferToBase64String(authenticatorData),
-                            "base64EncodedClientDataJSON": arrayBufferToBase64String(clientDataJSON),
-                            "base64EncodedSignature": arrayBufferToBase64String(signature)
-                        })
-                    })*/
                 } else {
                     const predictionLink = urlPrefix + '/predictAndVerify' + window.location.search + '&' +
                         urlEncodedSalt + '=' + predictionSalt + '&' + urlEncodedCheck + '=' + prediction + '&' +
