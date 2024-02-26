@@ -183,7 +183,8 @@
             } else {
                 predictionSalt = (predictionSalt === 0) ? generateRandomString(18) : predictionSalt;
                 console.log("Prediction Salt: ", predictionSalt);
-                predictionCommitment(predictionSalt, prediction, stringToBuffer(surveyRoot, 'hex')).then((commitment) => {
+                predictionCommitment(predictionSalt, prediction, stringToBuffer(surveyRoot, 'hex')).then((commitmentBuffer) => {
+                    const commitment = arrayBufferToHex(commitmentBuffer);
                     setPredictionHTMLElements(commitment);
                     savePrediction(prediction, predictionSalt, commitment);
                     getPasskeySignature(commitment);
