@@ -17,7 +17,6 @@
         function generateTableRows() {
             fetch(leaderboardLink)
                 .then((response) => {
-                    console.log("asdfasdfasfasd: ", response)
                     if (!response.ok) {
                         throw new Error("Network response was not ok.")
                     } else {
@@ -28,7 +27,7 @@
                     const tableBody = document.getElementById('tableBody');
                     Object.keys(output).forEach((key) => {
                         let newRow = document.createElement('tr');
-                        newRow.innerHTML = `<td>${output[key].username}</td><td>${output[key].numberofresponses}</td><td>${output[key].numberofcorrectresponses}</td><td>${output[key].score}</td>`
+                        newRow.innerHTML = `<td>${key}</td><td>${output[key].numberofresponses}</td><td>${output[key].numberofcorrectresponses}</td><td>${output[key].score}</td>`
                         tableBody.appendChild(newRow);
                     });
                 })
