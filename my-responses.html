@@ -29,8 +29,12 @@
                     }
                 })
                 .then((output) => {
-                    console.log("output: ", output.map(user => `<tr><td>${user.surveyroot}</td><td>${user.surveyselection}</td><td>${user.timestamp}</td></tr>`).join(''));
-                    return output.map(user => `<tr><td>${user.surveyroot}</td><td>${user.surveyselection}</td><td>${user.timestamp}</td></tr>`).join('');
+                    const tableBody = document.getElementById('tableBody');
+                    output.map((user) => {
+                        let newRow = document.createElement('tr');
+                        newRow.innerHTML = `<td>${user.surveyroot}</td><td>${user.surveyselection}</td><td>${username.timestamp}</td>`
+                        tableBody.appendChild(newRow);
+                    })
                 })
                 .catch((err) => {
                     // TODO: put some logic here to surface the error
@@ -56,9 +60,7 @@
         async function onload() {
             const userFound = retrievePublicKey();
             if (userFound) {
-                const tableContainer = document.getElementById('tableContainer');
-                const tableHTML = `<table><thead><tr><th>Survey Root</th><th>Survey Selection</th><th>Timestamp</th></tr></thead><tbody>${await generateTableRows()}</tbody></table>`;
-                tableContainer.innerHTML = tableHTML;
+                generateTableRows();
             }
         }
     </script>
@@ -80,7 +82,14 @@
         <h2 id="🐬"> Your Responses </h2>
     </div>
 
-    <div id="tableContainer"></div>
+    <div id="tableContainer">
+        <table>
+            <thead>
+                <tr><th>Survey Root</th><th>Survey Selection</th><th>Timestamp</th></tr>
+            </thead>
+            <tbody id="tableBody"></tbody>
+        </table>
+    </div>
     <footer style="position: fixed; bottom: 0; width: 100%; text-align: center;">
         <p>
             &copy; ⏰2024 🔮PORPOISE Network.
