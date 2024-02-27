@@ -21,6 +21,21 @@ header {
     z-index: 10;
 }
 
+table {
+    margin: auto;
+    border-collapse: collapse; /* Ensures borders touch */
+}
+/* Style for the table cells */
+td, th {
+    border: 1px solid #0ff; /* Example color: blue */
+    padding: 8px; /* Adjusts the padding inside cells for aesthetics */
+}
+/* Optional: Style for table headers */
+th {
+    background-color: #0ff; /* Slightly darker blue for headers */
+    color: black; /* White text for contrast */
+}
+
 h1 {
     font-size: 3em;
     margin: 10px;
