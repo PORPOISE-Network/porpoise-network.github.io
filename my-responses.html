@@ -32,7 +32,7 @@
                     const tableBody = document.getElementById('tableBody');
                     output.map((user) => {
                         let newRow = document.createElement('tr');
-                        newRow.innerHTML = `<td>${user.surveyroot}</td><td>${user.surveyselection}</td><td>${username.timestamp}</td>`
+                        newRow.innerHTML = `<td>${user.surveyroot.slice(0,15)}...</td><td>${user.surveyselection}</td><td>${user.timestamp}</td>`
                         tableBody.appendChild(newRow);
                     })
                 })
