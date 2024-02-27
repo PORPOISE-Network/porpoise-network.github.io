@@ -46,6 +46,7 @@
             // Retrieve the Base64 string from localStorage
             const userObject = JSON.parse(localStorage.getItem('userObject'));
             if (!userObject) {
+                document.getElementById('response-title').innerText = "No Responses Found.";
                 console.log("User is not logged in yet.")
                 return false;
             }
@@ -79,7 +80,7 @@
 
     <br>
     <div styles="margin:auto">
-        <h2 id="🐬"> Your Responses </h2>
+        <h2 id="response-title"> Your Responses </h2>
     </div>
 
     <div id="tableContainer">
