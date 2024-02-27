@@ -29,7 +29,7 @@
                     }
                 })
                 .then((output) => {
-                    return data.map(user => `<tr><td>${user.surveyroot}</td><td>${user.surveyselection}</td><td>${user.timestamp}</td></tr>`).join('');
+                    return output.map(user => `<tr><td>${user.surveyroot}</td><td>${user.surveyselection}</td><td>${user.timestamp}</td></tr>`).join('');
                 })
                 .catch((err) => {
                     // TODO: put some logic here to surface the error
