@@ -29,7 +29,7 @@
                     }
                 })
                 .then((output) => {
-                    console.log("output: ", output);
+                    console.log("output: ", output.map(user => `<tr><td>${user.surveyroot}</td><td>${user.surveyselection}</td><td>${user.timestamp}</td></tr>`).join(''));
                     return output.map(user => `<tr><td>${user.surveyroot}</td><td>${user.surveyselection}</td><td>${user.timestamp}</td></tr>`).join('');
                 })
                 .catch((err) => {
