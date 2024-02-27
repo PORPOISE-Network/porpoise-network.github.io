@@ -29,6 +29,7 @@
                     Object.keys(output).forEach((key) => {
                         let newRow = document.createElement('tr');
                         newRow.innerHTML = `<td>${output[key].username}</td><td>${output[key].numberofresponses}</td><td>${output[key].numberofcorrectresponses}</td><td>${output[key].score}</td>`
+                        tableBody.appendChild(newRow);
                     });
                 })
                 .catch((err) => {
