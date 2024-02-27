@@ -53,11 +53,11 @@
             return true;
         }
 
-        function onload() {
+        async function onload() {
             const userFound = retrievePublicKey();
             if (userFound) {
                 const tableContainer = document.getElementById('tableContainer');
-                const tableHTML = `<table><thead><tr><th>Survey Root</th><th>Survey Selection</th><th>Timestamp</th></tr></thead><tbody>${generateTableRows()}</tbody></table>`;
+                const tableHTML = `<table><thead><tr><th>Survey Root</th><th>Survey Selection</th><th>Timestamp</th></tr></thead><tbody>${await generateTableRows()}</tbody></table>`;
                 tableContainer.innerHTML = tableHTML;
             }
         }
