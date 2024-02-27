@@ -10,7 +10,7 @@
     <meta name="description" content="Proof of Reputation Protocol">
     <title>PORPOISE Network</title>
 
-    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="take-survey.css">
 
     <script>
         const urlPrefix = 'https://zkporpoise.replit.app';
@@ -48,7 +48,7 @@
             keyID = userObject.keyID;
             username = userObject.username;
             dataLink = urlPrefix + '/fetch-my-responses' + '?' + urlEncodedDisguisedFace + '=' + username;
-            document.getElementById("username").innerText = document.getElementById("username").innerText.replace(/__/g, username).slice(0, 13);;
+            document.getElementById("username").innerText = document.getElementById("username").innerText.replace(/__/g, username).slice(0, 13);
             return true;
         }
 
@@ -65,7 +65,8 @@
 
 <body onload="onload()">
     <header>
-        <h1 title="🐬 Proof of Reputation Protocol for Outsourced Intuition Sampling Ensembles">PORPOISE Network</h1>
+        <div id="username" title="Username">🥸:__</div>
+        <div id="menu" title="🐬 Home Menu"><a href="/">PORPOISE</a></div>
     </header>
 
     <h2 id="🐬">
