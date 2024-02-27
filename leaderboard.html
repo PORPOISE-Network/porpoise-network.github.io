@@ -26,11 +26,10 @@
                 })
                 .then((output) => {
                     const tableBody = document.getElementById('tableBody');
-                    output.map((user) => {
+                    Object.keys(output).forEach((key) => {
                         let newRow = document.createElement('tr');
-                        newRow.innerHTML = `<td>${user.username.slice(0,15)}...</td><td>${user.numberofresponses}</td><td>${user.numberofcorrectresponses}</td><td>${user.score}</td>`
-                        tableBody.appendChild(newRow);
-                    })
+                        newRow.innerHTML = `<td>${output[key].username}</td><td>${output[key].numberofresponses}</td><td>${output[key].numberofcorrectresponses}</td><td>${output[key].score}</td>`
+                    });
                 })
                 .catch((err) => {
                     // TODO: put some logic here to surface the error
@@ -59,8 +58,8 @@
             <thead>
                 <tr>
                     <th>Username</th>
-                    <th>Number of Responses</th>
-                    <th>Number of Correct Responses</th>
+                    <th># of Responses</th>
+                    <th># Correct Responses</th>
                     <th>Score</th>
                 </tr>
             </thead>
