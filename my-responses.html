@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="keywords"
+        content="PORPOISE, Proof of Reputation, Protocol, zero knowledge proof, zkSNARK, crypto, Mina Protocol, Protokit, survey, prediction">
+    <meta name="description" content="Proof of Reputation Protocol">
+    <title>PORPOISE Network</title>
+
+    <link rel="stylesheet" href="index.css">
+
+    <script>
+        const urlPrefix = 'https://zkporpoise.replit.app';
+        const urlEncodedDisguisedFace = '%F0%9F%A5%B8';
+        let dataLink;
+        let username;
+
+        // Function to generate table rows from responsesData
+        function generateTableRows() {
+            fetch(dataLink)
+                .then((response) => {
+                    if (!response.ok) {
+                        throw new Error("Network response was not ok.")
+                    } else {
+                        return response.json();
+                    }
+                })
+                .then((output) => {
+                    return data.map(user => `<tr><td>${user.surveyroot}</td><td>${user.surveyselection}</td><td>${user.timestamp}</td></tr>`).join('');
+                })
+                .catch((err) => {
+                    // TODO: put some logic here to surface the error
+                    console.log("ERROR Registering Passkey: ", err);
+                });
+        }
+
+        function retrievePublicKey() {
+            // Retrieve the Base64 string from localStorage
+            const userObject = JSON.parse(localStorage.getItem('userObject'));
+            if (!userObject) {
+                console.log("User is not logged in yet.")
+                return false;
+            }
+            publicKeySting = userObject.pubKey;
+            keyID = userObject.keyID;
+            username = userObject.username;
+            dataLink = urlPrefix + '/fetch-my-responses' + '?' + urlEncodedDisguisedFace + '=' + username;
+            document.getElementById("username").innerText = document.getElementById("username").innerText.replace(/__/g, username).slice(0, 13);;
+            return true;
+        }
+
+        function onload() {
+            const userFound = retrievePublicKey();
+            if (userFound) {
+                const tableContainer = document.getElementById('tableContainer');
+                const tableHTML = `<table><thead><tr><th>Survey Root</th><th>Survey Selection</th><th>Timestamp</th></tr></thead><tbody>${generateTableRows()}</tbody></table>`;
+                tableContainer.innerHTML = tableHTML;
+            }
+        }
+    </script>
+</head>
+
+<body onload="onload()">
+    <header>
+        <h1 title="🐬 Proof of Reputation Protocol for Outsourced Intuition Sampling Ensembles">PORPOISE Network</h1>
+    </header>
+
+    <h2 id="🐬">
+        <p>🐬 Building reputation,</p>
+        <p>one prediction at a time.</p>
+    </h2>
+
+    <br>
+    <div styles="margin:auto">
+        <h2 id="🐬"> Your Responses </h2>
+    </div>
+
+    <div id="tableContainer"></div>
+    <footer style="position: fixed; bottom: 0; width: 100%; text-align: center;">
+        <p>
+            &copy; ⏰2024 🔮PORPOISE Network.
+        </p>
+    </footer>
+</body>
+
+</html>
