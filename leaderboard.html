@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="keywords"
+        content="PORPOISE, Proof of Reputation, Protocol, zero knowledge proof, zkSNARK, crypto, Mina Protocol, Protokit, survey, prediction">
+    <meta name="description" content="Proof of Reputation Protocol">
+    <title>PORPOISE Network</title>
+
+    <script>
+        const urlPrefix = 'https://zkporpoise.replit.app/fetch-leaderboard';
+        let leaderboardLink;
+
+        // Function to generate table rows from responsesData
+        function generateTableRows() {
+            fetch(leaderboardLink)
+                .then((response) => {
+                    console.log("asdfasdfasfasd: ", response)
+                    if (!response.ok) {
+                        throw new Error("Network response was not ok.")
+                    } else {
+                        return response.json();
+                    }
+                })
+                .then((output) => {
+                    const tableBody = document.getElementById('tableBody');
+                    output.map((user) => {
+                        let newRow = document.createElement('tr');
+                        newRow.innerHTML = `<td>${user.username.slice(0,15)}...</td><td>${user.numberofresponses}</td><td>${user.numberofcorrectresponses}</td><td>${user.score}</td>`
+                        tableBody.appendChild(newRow);
+                    })
+                })
+                .catch((err) => {
+                    // TODO: put some logic here to surface the error
+                    console.log("ERROR Registering Passkey: ", err);
+                });
+        }
+    </script>
+
+    <link rel="stylesheet" href="take-survey.css">
+</head>
+
+<body onload="generateTableRows()">
+    <header>
+        <div id="username" title="Username">🥸:__</div>
+        <div id="menu" title="🐬 Home Menu"><a href="/">PORPOISE</a></div>
+    </header>
+
+    <h2 id="🐬">
+        <p>🐬 Resurrecting the dead internet.</p>
+    </h2>
+
+    <br>
+    <h2 id="🐬"> LEADERBOARD </h2>
+    <div id="tableContainer">
+        <table>
+            <thead>
+                <tr>
+                    <th>Username</th>
+                    <th>Number of Responses</th>
+                    <th>Number of Correct Responses</th>
+                    <th>Score</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody"></tbody>
+        </table>
+    </div>
+    <footer style="position: fixed; bottom: 0; width: 100%; text-align: center;">
+        <p>
+            &copy; ⏰2024 🔮PORPOISE Network.
+        </p>
+    </footer>
+</body>
+
+</html>
